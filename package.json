@@ -51,7 +51,11 @@
     },
     "deb": {
       "afterInstall": "build/linux/after-install.sh",
-      "afterRemove": "build/linux/after-remove.sh"
+      "afterRemove": "build/linux/after-remove.sh",
+      "artifactName": "seizia-linux-amd64.${ext}"
+    },
+    "appImage": {
+      "artifactName": "${productName}-linux-x86_64.${ext}"
     },
     "mac": {
       "target": [
@@ -68,10 +72,13 @@
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist"
     },
+    "dmg": {
+      "artifactName": "${productName}-macos-universal.${ext}"
+    },
     "win": {
       "target": "nsis",
       "icon": "icon.ico",
-      "artifactName": "${productName}-Setup-${version}.${ext}"
+      "artifactName": "${productName}-Setup-windows.${ext}"
     },
     "extraResources": [
       {
