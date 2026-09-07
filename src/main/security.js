@@ -16,34 +16,12 @@ const AUTO_ALLOWED_PERMISSIONS = new Set([
 // scope so opening a second tab on the same site does not ask again.
 const mediaDecisions = new Map();
 
-// Domains whose security headers must stay intact (auth, captchas, embeds).
-const PRESERVE_SECURITY_HEADERS_FOR = [
-    'google.com',
-    'accounts.google.com',
-    'youtube.com',
-    'gstatic.com',
-    'cloudflare.com',
-    'cloudflareinsights.com',
-    'turnstile.com',
-    'poe.com'
-];
-
-function deleteHeaderCaseInsensitive(headers, name) {
-    Object.keys(headers).forEach((key) => {
-        if (key.toLowerCase() === name) {
-            delete headers[key];
-        }
-    });
-}
-
-function shouldPreserveSecurityHeaders(urlString) {
-    const url = (urlString || '').toLowerCase();
-    return PRESERVE_SECURITY_HEADERS_FOR.some((domain) => url.includes(domain));
-}
-
+// Response headers are left untouched on purpose. Sites are shown in a
+// top-level BrowserView, never in an iframe or a <webview>, so X-Frame-Options
+// never blocked anything here; stripping it only removed clickjacking
+// protection from the frames those sites load themselves, such as sign-in
+// popups and Cloudflare Turnstile challenges.
 function configureGlobalWebContents(app) {
-    const initializedSessions = new WeakSet();
-
     app.commandLine.appendSwitch('disable-blink-features', 'AutomationControlled');
 
     app.on('web-contents-created', (_event, contents) => {
@@ -55,21 +33,6 @@ function configureGlobalWebContents(app) {
             contents.session.setSpellCheckerLanguages(SPELLCHECK_LANGUAGES);
         } catch (error) {
             console.error('Failed to set spellchecker languages:', error);
-        }
-
-        if (!initializedSessions.has(contents.session)) {
-            initializedSessions.add(contents.session);
-            contents.session.webRequest.onHeadersReceived((details, callback) => {
-                const responseHeaders = details.responseHeaders || {};
-
-                // Never strip CORP/COOP/CSP: removing them breaks Cloudflare Turnstile
-                // (ERR_BLOCKED_BY_RESPONSE) on sites like Poe.
-                if (!shouldPreserveSecurityHeaders(details.url || '')) {
-                    deleteHeaderCaseInsensitive(responseHeaders, 'x-frame-options');
-                }
-
-                callback({ cancel: false, responseHeaders });
-            });
         }
 
         contents.on('will-navigate', (event, targetUrl) => {
