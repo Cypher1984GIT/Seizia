@@ -7,7 +7,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "node --check main.js && node --check preload-app.js && node --check preload-view.js && node --check preload-more-menu.js && node --check renderer.js && node --check prompts-catalog.js && node --check prompts-library.js && node --check src/main/windowState.js && node --check src/main/promptStore.js && node --check src/main/moreMenuPopup.js && node --check src/main/security.js && node --check src/main/updater.js && node --check src/main/menu.js && node --check src/main/viewManager.js && node --check src/main/license/config.js && node --check src/main/license/licenseStore.js && node --check src/main/license/licenseService.js",
+    "test": "node --check main.js && node --check preload-app.js && node --check preload-view.js && node --check preload-more-menu.js && node --check renderer.js && node --check prompts-catalog.js && node --check prompts-library.js && node --check src/main/windowState.js && node --check src/main/promptStore.js && node --check src/main/moreMenuPopup.js && node --check src/main/security.js && node --check src/main/updater.js && node --check src/main/menu.js && node --check src/main/viewManager.js && node --check src/main/proLayer.js",
     "build": "electron-builder",
     "publish": "electron-builder --publish always"
   },
@@ -97,7 +97,11 @@
       "prompts-catalog.js",
       "prompts-library.js",
       "more-menu.html",
-      "preload-more-menu.js"
+      "preload-more-menu.js",
+      "pro/**/*",
+      "!pro/.git/**",
+      "!pro/.github/**",
+      "!pro/README.md"
     ],
     "publish": [
       {

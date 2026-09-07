@@ -7,8 +7,7 @@ const { createAppMenu } = require('./src/main/menu');
 const { ViewManager } = require('./src/main/viewManager');
 const { createPromptStore } = require('./src/main/promptStore');
 const { createMoreMenuController } = require('./src/main/moreMenuPopup');
-const { createLicenseStore } = require('./src/main/license/licenseStore');
-const { createLicenseService } = require('./src/main/license/licenseService');
+const { createLicenseLayer } = require('./src/main/proLayer');
 
 let win;
 let currentTheme = 'dark';
@@ -17,8 +16,7 @@ configureGlobalWebContents(app);
 
 const stateStore = createWindowStateStore(app);
 const promptStore = createPromptStore(app);
-const licenseStore = createLicenseStore(app);
-const licenseService = createLicenseService({ app, store: licenseStore });
+const licenseService = createLicenseLayer({ app });
 const moreMenu = createMoreMenuController({
     winRef: () => win,
     getTheme: () => currentTheme,

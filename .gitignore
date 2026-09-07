@@ -32,6 +32,10 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 
+# Seizia Pro drop-in module, kept in its own private repository.
+# No trailing slash: locally it is a symlink, and git treats that as a file.
+pro
+
 # Project files kept out of the public repo
 landing/
 Iconos/
