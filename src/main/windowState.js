@@ -4,17 +4,20 @@ const path = require('path');
 function createWindowStateStore(app) {
     const stateFilePath = path.join(app.getPath('userData'), 'window-state.json');
 
-    function load() {
+    function readPreviousState() {
         try {
             if (fs.existsSync(stateFilePath)) {
-                const data = fs.readFileSync(stateFilePath, 'utf8');
-                return JSON.parse(data);
+                return JSON.parse(fs.readFileSync(stateFilePath, 'utf8'));
             }
         } catch (error) {
-            console.error('Failed to load window state:', error);
+            console.error('Failed to read window state:', error);
         }
 
-        return { width: 1300, height: 900, isMaximized: true, theme: 'dark' };
+        return null;
+    }
+
+    function load() {
+        return readPreviousState() || { width: 1300, height: 900, isMaximized: true, theme: 'dark' };
     }
 
     function save(win, theme) {
@@ -31,12 +34,18 @@ function createWindowStateStore(app) {
 
             if (!isMaximized) {
                 Object.assign(state, win.getBounds());
-            } else if (fs.existsSync(stateFilePath)) {
-                const previous = JSON.parse(fs.readFileSync(stateFilePath, 'utf8'));
-                state.x = previous.x;
-                state.y = previous.y;
-                state.width = previous.width;
-                state.height = previous.height;
+            } else {
+                // Keep the restore-down bounds, but never let an unreadable
+                // file abort the write: that would leave the corrupt state on
+                // disk and break saving on every later run too.
+                const previous = readPreviousState();
+
+                if (previous) {
+                    state.x = previous.x;
+                    state.y = previous.y;
+                    state.width = previous.width;
+                    state.height = previous.height;
+                }
             }
 
             fs.writeFileSync(stateFilePath, JSON.stringify(state));
