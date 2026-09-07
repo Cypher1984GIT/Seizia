@@ -84,7 +84,7 @@ Seizia is designed with privacy as a priority.
 
 The Seizia desktop app is open source under the [ISC License](LICENSE). You are welcome to explore the code, open issues, and send pull requests.
 
-**Seizia Pro** is the paid tier, unlocked with a license key bought once: Ask All, Split View, your own prompt library with categories, and more than three tabs at a time. The free app is fully usable without it.
+Seizia is free and every feature is included: Ask All, Split View, your own prompt library with categories, and as many tabs as you want. There is no paid tier, no account, and no sign-up.
 
 If you fork Seizia and redistribute a modified build, please ship it under a different name. "Seizia" and its logo identify the official builds, so that users always know what they are downloading.
 

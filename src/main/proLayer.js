@@ -2,19 +2,19 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * Seizia Pro ships as a drop-in module in `pro/`, which is not part of this
- * repository. Without it the app runs as the free tier: the limits below are
- * the ones the UI enforces.
+ * Seizia is free: every feature below is on for everyone, so the UI gates
+ * never fire. The `pro/` module seam is kept in place so a paid tier could be
+ * reintroduced by tightening these values, but nothing is gated today.
  */
 const PRO_MODULE_DIR = path.join(__dirname, '..', '..', 'pro');
 
 const FREE_FEATURES = {
     isPro: false,
-    maxTabs: 3,
-    askAll: false,
-    splitView: false,
-    myPrompts: false,
-    checkoutUrl: process.env.SEIZIA_CHECKOUT_URL || 'https://github.com/Cypher1984GIT/Seizia#license'
+    maxTabs: Number.POSITIVE_INFINITY,
+    askAll: true,
+    splitView: true,
+    myPrompts: true,
+    checkoutUrl: process.env.SEIZIA_CHECKOUT_URL || 'https://github.com/Cypher1984GIT/Seizia'
 };
 
 function freeStatus(extra = {}) {

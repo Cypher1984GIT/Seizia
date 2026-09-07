@@ -22,6 +22,5 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     bindItem('more-menu-help', 'help');
-    bindItem('more-menu-license', 'license');
     bindItem('more-menu-reset', 'reset');
 });

@@ -1008,13 +1008,15 @@ omni.on('more-menu-action', (action) => {
 });
 
 /* License Modal */
+// Seizia is free, so these defaults are already permissive: if the status
+// never arrives from the main process, the app must not silently limit itself.
 let appFeatures = {
     isPro: false,
-    maxTabs: 3,
-    askAll: false,
-    splitView: false,
-    myPrompts: false,
-    checkoutUrl: 'https://polar.sh/'
+    maxTabs: Number.POSITIVE_INFINITY,
+    askAll: true,
+    splitView: true,
+    myPrompts: true,
+    checkoutUrl: 'https://github.com/Cypher1984GIT/Seizia'
 };
 let licenseBusy = false;
 

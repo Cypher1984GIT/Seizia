@@ -2,7 +2,8 @@ const path = require('path');
 const { BrowserWindow } = require('electron');
 
 const PANEL_WIDTH = 176;
-const PANEL_HEIGHT = 126;
+// Two items at 30px each plus the panel's 4px padding and 1px borders.
+const PANEL_HEIGHT = 70;
 const SHADOW_PAD = 12;
 const MENU_WIDTH = PANEL_WIDTH + (SHADOW_PAD * 2);
 const MENU_HEIGHT = PANEL_HEIGHT + (SHADOW_PAD * 2);
@@ -118,7 +119,7 @@ function createMoreMenuController({ winRef, getTheme, sendToWindow }) {
 
     function pick(action) {
         close();
-        if (action === 'help' || action === 'license' || action === 'reset') {
+        if (action === 'help' || action === 'reset') {
             sendToWindow('more-menu-action', action);
         }
     }
