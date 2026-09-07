@@ -13,9 +13,12 @@ function buildDownloadUrl(version, platform) {
 function createUpdater({ winRef }) {
     autoUpdater.logger = require('electron-log');
     autoUpdater.logger.transports.file.level = 'info';
+    // Updates are only announced here: the user is sent to the GitHub release
+    // page and installs by hand. The installers are not code-signed yet, so
+    // autoDownload must stay off until they are, otherwise electron-updater
+    // would install a binary whose signature it cannot check.
     autoUpdater.autoDownload = false;
     autoUpdater.autoInstallOnAppQuit = false;
-    autoUpdater.verifyUpdateCodeSignature = false;
 
     function send(channel, payload) {
         const win = winRef();
