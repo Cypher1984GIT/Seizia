@@ -466,6 +466,28 @@ pre {
     margin: 0;
 }
 
+.slip-made {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+}
+
+.slip-badge {
+    display: block;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.slip-badge:hover,
+.slip-badge:focus-visible {
+    opacity: 1;
+}
+
+.slip-badge img {
+    display: block;
+}
+
 .hero-copy,
 .sheet-head,
 .bom li,
