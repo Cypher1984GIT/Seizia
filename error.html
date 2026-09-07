@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: "IBM Plex Mono", ui-monospace, monospace;
+            background-color: #0a0b0d;
+            color: #9a9286;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 20px;
+            stroke: #0066FF;
+        }
+
+        h2 {
+            margin: 0 0 10px 0;
+            color: #ebe4d4;
+            font-family: "Big Shoulders Display", Impact, sans-serif;
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        p {
+            margin: 0 0 20px 0;
+            font-size: 13px;
+        }
+
+        button {
+            padding: 8px 16px;
+            background: #0066FF;
+            color: white;
+            border: 1px solid #0066FF;
+            border-radius: 2px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            filter: brightness(1.08);
+        }
+    </style>
+</head>
+
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <h2>Something Went Wrong</h2>
+    <p>We couldn't load the page. Please check your connection.</p>
+    <button onclick="retry()">Retry</button>
+
+    <script>
+        function retry() {
+            const params = new URLSearchParams(window.location.search);
+            const url = params.get('url');
+            if (url) {
+                window.location.href = url;
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' file: data: https:; script-src 'self' file: 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' file: 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' file: data: https:; connect-src 'self' file: https:;">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="tailwind-config.js"></script>
+    <title>Seizia</title>
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        // Immediately invoke theme check to prevent flicker
+        (function () {
+            const savedTheme = localStorage.getItem('omni-theme');
+            // Default to dark if not set, or if set to dark
+            if (savedTheme === 'light') {
+                document.documentElement.classList.remove('dark');
+            } else {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+    <style id="no-transitions">
+        * {
+            transition: none !important;
+        }
+    </style>
+</head>
+
+<body class="bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 overflow-hidden shop">
+    <div id="header"
+        class="shop-rail h-12 flex items-center px-3 gap-3 z-[70] select-none drag-region">
+        <img src="logo.png" alt="Seizia"
+            class="logo-mark h-6 w-auto no-drag select-none pointer-events-none shrink-0">
+        <div class="tabs-wrapper flex-1 flex items-center min-w-0 overflow-hidden no-drag">
+            <button id="scroll-left"
+                class="hidden text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 p-2"
+                onclick="scrollTabs(-1)">‹</button>
+            <div id="tabs" role="tablist" class="flex-1 flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth py-1"></div>
+            <button id="scroll-right"
+                class="hidden text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 p-2"
+                onclick="scrollTabs(1)">›</button>
+        </div>
+
+        <div class="controls flex items-center gap-1.5 pl-3 h-8 no-drag">
+            <button id="add-tab-btn"
+                class="add-btn shop-add w-8 h-8 flex items-center justify-center text-white dark:text-zinc-950 transition-all active:scale-95"
+                onclick="openLauncher()" title="Add New Tab">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M12 5v14M5 12h14" />
+                </svg>
+            </button>
+
+            <button id="split-btn" onclick="toggleSplit()" class="icon-btn" title="Toggle Split View">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M2.5 2A1.5 1.5 0 0 0 1 3.5v9A1.5 1.5 0 0 0 2.5 14h11a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 13.5 2h-11zm5 1.5v9h-5v-9h5zm1.5 0v9h5v-9H9z"
+                        clip-rule="evenodd" />
+                </svg>
+            </button>
+
+            <button id="ask-all-btn" onclick="openBroadcastModal()"
+                class="shop-ask h-8 px-3 flex items-center gap-2 bg-seizia hover:bg-seizia-hover text-white text-xs font-bold transition-all active:scale-95 whitespace-nowrap"
+                title="Send prompt to all AIs">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z" />
+                </svg>
+                <span>Ask All</span>
+            </button>
+
+            <button id="prompts-btn" class="icon-btn" title="Prompt library">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    <path d="M8 7h8M8 11h6" />
+                </svg>
+            </button>
+
+            <button class="reload-all-btn icon-btn" onclick="reloadAll()" title="Reload All">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M23 4v6h-6" />
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                </svg>
+            </button>
+
+            <button id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme" class="icon-btn">
+                <svg id="theme-sun-icon" class="hidden dark:block" width="16" height="16" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg id="theme-moon-icon" class="block dark:hidden" width="16" height="16" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+
+            <div id="more-menu-wrap" class="relative">
+                <button id="more-btn" type="button" class="icon-btn relative" title="More">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <circle cx="5" cy="12" r="1.75" />
+                        <circle cx="12" cy="12" r="1.75" />
+                        <circle cx="19" cy="12" r="1.75" />
+                    </svg>
+                    <span id="help-notification-dot"
+                        class="hidden absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white dark:border-zinc-900 animate-pulse"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Broadcast Modal -->
+    <div id="broadcast-modal"
+        class="hidden fixed inset-0 bg-[#f3eee6]/80 dark:bg-[#0a0b0d]/80 backdrop-blur-sm z-[100] flex items-center justify-center animate-fade-in">
+        <div
+            class="shop-dialog p-6 w-full max-w-[500px] mx-4 text-center">
+            <h3 class="shop-title text-2xl text-zinc-900 dark:text-zinc-50 mb-4 flex items-center justify-center gap-2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-seizia">
+                    <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z" />
+                </svg>
+                Ask All AIs
+            </h3>
+            <textarea id="broadcast-input"
+                class="shop-field w-full h-32 p-4 text-zinc-900 dark:text-zinc-200 outline-none resize-none mb-6 placeholder-zinc-500 dark:placeholder-zinc-600"
+                placeholder="Type your question here to send to all open AIs..."></textarea>
+            <div class="flex justify-between items-center gap-3">
+                <button id="broadcast-save-btn" type="button"
+                    class="px-4 py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:text-zinc-900 dark:hover:text-white transition-colors text-sm"
+                    title="Save this prompt to your library">Save</button>
+                <div class="flex justify-center gap-3">
+                    <button
+                        class="px-5 py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                        onclick="closeBroadcastModal()">Cancel</button>
+                    <button
+                        class="px-5 py-2 rounded-lg bg-seizia hover:bg-seizia-hover text-white font-bold shadow-lg shadow-blue-500/25 transition-all active:scale-95"
+                        onclick="sendBroadcast()">Send to All</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom App Modal -->
+    <div id="custom-app-modal"
+        class="hidden fixed inset-0 bg-[#f3eee6]/80 dark:bg-[#0a0b0d]/80 backdrop-blur-sm z-[100] flex items-center justify-center animate-fade-in">
+        <div
+            class="shop-dialog p-6 w-full max-w-[400px] mx-4">
+            <h3 class="shop-title text-2xl text-zinc-900 dark:text-zinc-50 mb-6 text-center">Add Custom AI</h3>
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label
+                        class="block text-xs font-medium text-zinc-500 dark:text-zinc-500 mb-1 uppercase tracking-wider">Name</label>
+                    <input type="text" id="custom-name" placeholder="e.g. My Local Server"
+                        class="shop-field w-full h-10 px-3 text-zinc-900 dark:text-zinc-200 outline-none">
+                </div>
+                <div>
+                    <label
+                        class="block text-xs font-medium text-zinc-500 dark:text-zinc-500 mb-1 uppercase tracking-wider">URL</label>
+                    <input type="text" id="custom-url" placeholder="https://..."
+                        class="shop-field w-full h-10 px-3 text-zinc-900 dark:text-zinc-200 outline-none">
+                </div>
+            </div>
+            <div class="flex justify-center gap-3">
+                <button
+                    class="px-5 py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    onclick="closeCustomModal()">Cancel</button>
+                <button
+                    class="px-5 py-2 rounded-lg bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-700 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 font-bold shadow-lg shadow-zinc-500/20 dark:shadow-zinc-900/20 transition-all active:scale-95"
+                    onclick="addCustomApp()">Add AI</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generic Alert Modal -->
+    <div id="alert-modal"
+        class="hidden fixed inset-0 bg-[#f3eee6]/80 dark:bg-[#0a0b0d]/80 backdrop-blur-sm z-[200] flex items-center justify-center animate-fade-in">
+        <div
+            class="shop-dialog p-6 w-full max-w-[350px] mx-4 text-center">
+            <div class="text-4xl mb-4">⚠️</div>
+            <h3 id="alert-title" class="shop-title text-xl text-zinc-900 dark:text-zinc-50 mb-2">Alert</h3>
+            <p id="alert-message" class="text-zinc-600 dark:text-zinc-400 text-sm mb-6 leading-relaxed">Message goes
+                here.</p>
+            <button
+                class="w-full py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white font-medium transition-colors"
+                onclick="closeAlertModal()">Got it</button>
+        </div>
+    </div>
+
+    <div id="view-curtain"
+        class="hidden fixed top-12 bottom-0 left-0 right-0 z-[55] bg-zinc-50 dark:bg-zinc-950 flex items-center justify-center pointer-events-none">
+        <div class="view-curtain-status flex flex-col items-center gap-3">
+            <div class="view-curtain-spinner"></div>
+            <p class="view-curtain-label">Loading<span class="view-curtain-dots"></span></p>
+        </div>
+    </div>
+
+    <!-- App Launcher / Empty State -->
+    <div id="app-launcher"
+        class="shop-floor hidden fixed top-12 bottom-0 left-0 right-0 z-[60] flex flex-col overflow-y-auto custom-scrollbar select-none">
+        <div class="launcher-grain" aria-hidden="true"></div>
+
+        <div class="launcher-stage min-h-full flex flex-col">
+            <!-- Launcher Header with Actions -->
+            <div
+                class="sticky top-0 z-10 flex flex-wrap items-center justify-end gap-3 px-4 py-3 sm:px-6">
+                <!-- Incognito inside Launcher -->
+                <div
+                    class="shop-stamp flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2">
+                    <span
+                        class="text-[10px] sm:text-xs font-bold text-zinc-500 uppercase tracking-widest">Incognito Mode</span>
+                    <div class="relative w-10 h-6 shrink-0">
+                        <input type="checkbox" id="incognito-check" class="peer hidden">
+                        <label for="incognito-check"
+                            class="block w-full h-full bg-zinc-700 dark:bg-zinc-800 cursor-pointer transition-all peer-checked:bg-seizia"></label>
+                        <div
+                            class="absolute left-1 top-1 w-4 h-4 bg-zinc-400 transition-all pointer-events-none peer-checked:translate-x-4 peer-checked:bg-white">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Close Launcher Button -->
+                <button id="close-launcher" onclick="closeLauncher()"
+                    class="shop-icon-close hidden w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50 transition-all">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="launcher-body flex-1 flex flex-col justify-center px-4 py-6 sm:px-8 sm:py-8 lg:px-10">
+                <div class="launcher-hero text-center w-full max-w-6xl mx-auto">
+                    <img src="logo.png" alt="Seizia"
+                        class="logo-mark relative z-[1] h-14 sm:h-20 lg:h-24 w-auto mx-auto mb-3 sm:mb-5 select-none pointer-events-none">
+                    <p class="launcher-stencil">Several AIs · One window</p>
+                    <h1 class="launcher-title">Welcome to Seizia</h1>
+
+                    <!-- Dynamically populated cards container -->
+                    <div id="launcher-grid"
+                        class="grid grid-cols-[repeat(auto-fill,minmax(7.25rem,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(8.25rem,1fr))] gap-3 sm:gap-4">
+                        <!-- Cards will be injected here -->
+                    </div>
+
+                    <div
+                        class="mt-8 sm:mt-12 lg:mt-16 text-zinc-600 text-xs sm:text-sm font-medium flex flex-wrap items-center justify-center gap-2 px-2">
+                        Tip: Toggle Split View with
+                        <span
+                            class="shop-kbd inline-flex items-center px-2 py-1 text-zinc-600 dark:text-zinc-400">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" class="mr-1.5">
+                                <path fill-rule="evenodd"
+                                    d="M2.5 2A1.5 1.5 0 0 0 1 3.5v9A1.5 1.5 0 0 0 2.5 14h11a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 13.5 2h-11zm5 1.5v9h-5v-9h5zm1.5 0v9h5v-9H9z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                        to use two AIs at once.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Split picker -->
+    <div id="split-picker-modal"
+        class="hidden fixed inset-0 bg-[#f3eee6]/80 dark:bg-[#0a0b0d]/80 backdrop-blur-sm z-[100] flex items-center justify-center animate-fade-in">
+        <div
+            class="shop-dialog p-6 w-full max-w-[440px] mx-4">
+            <h3 class="shop-title text-2xl text-zinc-900 dark:text-zinc-50 mb-1 text-center">Split View</h3>
+            <p class="text-zinc-600 dark:text-zinc-400 text-sm mb-4 text-center">Choose two AIs to compare side by side.</p>
+            <div class="grid grid-cols-2 gap-2 mb-4">
+                <div class="shop-slot px-3 py-2 min-h-[52px]">
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-seizia mb-1">Left</div>
+                    <div id="split-pick-left" class="text-sm text-zinc-500 truncate">Select an AI</div>
+                </div>
+                <div class="shop-slot px-3 py-2 min-h-[52px]">
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-seizia mb-1">Right</div>
+                    <div id="split-pick-right" class="text-sm text-zinc-500 truncate">Select an AI</div>
+                </div>
+            </div>
+            <div id="split-pick-list" class="flex flex-col gap-2 max-h-64 overflow-y-auto custom-scrollbar mb-6"></div>
+            <div class="flex justify-center gap-3">
+                <button type="button"
+                    class="px-5 py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    onclick="closeSplitPicker()">Cancel</button>
+                <button id="split-pick-confirm" type="button"
+                    class="px-5 py-2 rounded-lg bg-seizia hover:bg-seizia-hover text-white font-bold shadow-lg shadow-blue-500/25 transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
+                    onclick="confirmSplitPicker()">Split</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal"
+        class="hidden fixed inset-0 bg-[#f3eee6]/80 dark:bg-[#0a0b0d]/80 backdrop-blur-sm z-[220] flex items-center justify-center animate-fade-in">
+        <div
+            class="shop-dialog p-6 w-full max-w-[400px] mx-4 text-center">
+            <h3 id="confirm-title" class="shop-title text-xl text-zinc-900 dark:text-zinc-50 mb-2">Reset to Defaults?</h3>
+            <p id="confirm-message" class="text-zinc-600 dark:text-zinc-400 text-sm mb-6 leading-relaxed">All your tabs and custom settings will be lost.
+                This action cannot be
+                undone.</p>
+            <div class="flex justify-center gap-3">
+                <button
+                    class="px-5 py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:text-zinc-900 dark:hover:text-white transition-colors"
+                    onclick="closeModal()">Cancel</button>
+                <button id="confirm-action-btn"
+                    class="px-5 py-2 rounded-lg bg-red-50 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 text-red-600 dark:text-red-500 hover:text-red-700 dark:hover:text-red-400 font-medium border border-transparent hover:border-red-200 dark:hover:border-red-500/30 transition-all"
+                    onclick="confirmModalAction()">Reset Everything</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="help-modal"
+        class="hidden fixed inset-0 bg-[#f3eee6]/80 dark:bg-[#0a0b0d]/80 backdrop-blur-sm z-[150] flex items-center justify-center animate-fade-in">
+        <div
+            class="shop-dialog p-8 w-full max-w-[600px] mx-4 max-h-[80vh] overflow-y-auto custom-scrollbar">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="shop-title text-3xl text-zinc-900 dark:text-zinc-50 flex items-center gap-3">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        class="text-blue-500">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    Help & Features
+                </h3>
+                <button onclick="closeHelpModal()"
+                    class="text-zinc-400 hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-white transition-colors">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="space-y-6 text-zinc-700 dark:text-zinc-300">
+                <section>
+                    <h4 class="text-zinc-900 dark:text-white font-semibold mb-2 flex items-center gap-2">
+                        <span
+                            class="w-6 h-6 flex items-center justify-center bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded text-xs">1</span>
+                        Unified AI Tabs
+                    </h4>
+                    <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 pl-8">
+                        Keep multiple AI chats open in a single window. Switch between ChatGPT, Gemini, Claude, and more
+                        instantly without losing context. While a new tab loads, Seizia shows a loading screen so you
+                        don't see a flash from the site. Drag tabs to reorder them. Close with the X; reload appears on hover.
+                    </p>
+                </section>
+
+                <section>
+                    <h4 class="text-zinc-900 dark:text-white font-semibold mb-2 flex items-center gap-2">
+                        <span
+                            class="w-6 h-6 flex items-center justify-center bg-seizia/10 text-seizia rounded text-xs">2</span>
+                        Split View
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"
+                            class="inline-block ml-1 opacity-70">
+                            <path fill-rule="evenodd"
+                                d="M2.5 2A1.5 1.5 0 0 0 1 3.5v9A1.5 1.5 0 0 0 2.5 14h11a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 13.5 2h-11zm5 1.5v9h-5v-9h5zm1.5 0v9h5v-9H9z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </h4>
+                    <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 pl-8">
+                        Compare responses side-by-side. Needs at least two open AI tabs. If you have more than two,
+                        choose which pair to split.
+                    </p>
+                </section>
+
+                <section>
+                    <h4 class="text-zinc-900 dark:text-white font-semibold mb-2 flex items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-seizia">
+                            <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z" />
+                        </svg>
+                        Ask All AIs
+                    </h4>
+                    <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 pl-8">
+                        Type a prompt once and send it to <strong>all</strong> open AI tabs. Use <strong>Save</strong>
+                        in that window to store it in My prompts.
+                    </p>
+                </section>
+
+                <section>
+                    <h4 class="text-zinc-900 dark:text-white font-semibold mb-2 flex items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-seizia">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                            <path d="M8 7h8M8 11h6" />
+                        </svg>
+                        Prompt library
+                    </h4>
+                    <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 pl-8">
+                        Open the book icon in the header. <strong>Library</strong> has ready-made prompts.
+                        <strong>My prompts</strong> is yours — add one with <strong>Add prompt</strong>, or save a copy
+                        from the catalog. <strong>Categories</strong> lets you add, rename, or delete any category,
+                        including the defaults. Deleted categories send their prompts to <strong>Uncategorized</strong>,
+                        which cannot be renamed or deleted. <strong>Use</strong> sends it to the active AI (you can edit first),
+                        or to all AIs if you have two or more tabs. Your prompts stay on this computer even if you reset tabs.
+                    </p>
+                </section>
+
+                <section>
+                    <h4 class="text-zinc-900 dark:text-white font-semibold mb-2 flex items-center gap-2">
+                        <span
+                            class="w-6 h-6 flex items-center justify-center bg-zinc-200 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 rounded text-xs">3</span>
+                        Incognito Mode
+                    </h4>
+                    <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 pl-8">
+                        Open a tab in Incognito to skip saving that session. Marked with glasses on the tab.
+                        AIs that require a login (Claude, Poe, DeepSeek, etc.) cannot be opened in Incognito.
+                    </p>
+                </section>
+
+                <section>
+                    <h4 class="text-zinc-900 dark:text-white font-semibold mb-2 flex items-center gap-2">
+                        <span
+                            class="w-6 h-6 flex items-center justify-center bg-green-500/10 text-green-600 dark:text-green-400 rounded text-xs">4</span>
+                        Custom AIs
+                    </h4>
+                    <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 pl-8">
+                        Don't see your favorite tool? Add any website or local AI as a custom tab.
+                    </p>
+                </section>
+
+                <section>
+                    <h4 class="text-zinc-900 dark:text-white font-semibold mb-2 flex items-center gap-2">
+                        <span
+                            class="w-6 h-6 flex items-center justify-center bg-seizia/10 text-seizia rounded text-xs font-bold">⋯</span>
+                        More menu
+                    </h4>
+                    <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 pl-8">
+                        The <strong>⋯</strong> button opens Help, License, and Reset. Reset clears open tabs and returns Seizia
+                        to defaults; it does <strong>not</strong> delete My prompts or your license.
+                    </p>
+                </section>
+
+                <section>
+                    <h4 class="text-zinc-900 dark:text-white font-semibold mb-2 flex items-center gap-2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-seizia">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                        </svg>
+                        Light &amp; dark theme
+                    </h4>
+                    <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 pl-8">
+                        Use the sun/moon button in the header. The theme applies to Seizia and is passed to open AI tabs
+                        when the site supports it.
+                    </p>
+                </section>
+
+                <section>
+                    <h4 class="text-zinc-900 dark:text-white font-semibold mb-2 flex items-center gap-2">
+                        <span
+                            class="w-6 h-6 flex items-center justify-center bg-zinc-200 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 rounded text-xs">⌨️</span>
+                        Keyboard Shortcuts
+                    </h4>
+                    <div class="grid grid-cols-2 gap-x-8 gap-y-2 text-sm text-zinc-600 dark:text-zinc-400 pl-8">
+                        <div
+                            class="flex justify-between items-center border-b border-zinc-200 dark:border-zinc-800/50 pb-1">
+                            <span>New Tab</span>
+                            <kbd
+                                class="font-sans text-[10px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">Ctrl
+                                + T</kbd>
+                        </div>
+                        <div
+                            class="flex justify-between items-center border-b border-zinc-200 dark:border-zinc-800/50 pb-1">
+                            <span>Close Tab</span>
+                            <kbd
+                                class="font-sans text-[10px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">Ctrl
+                                + W</kbd>
+                        </div>
+                        <div
+                            class="flex justify-between items-center border-b border-zinc-200 dark:border-zinc-800/50 pb-1">
+                            <span>Next Tab</span>
+                            <kbd
+                                class="font-sans text-[10px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">Ctrl
+                                + Tab</kbd>
+                        </div>
+                        <div
+                            class="flex justify-between items-center border-b border-zinc-200 dark:border-zinc-800/50 pb-1">
+                            <span>Prev Tab</span>
+                            <kbd
+                                class="font-sans text-[10px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">Ctrl
+                                + Shift + Tab</kbd>
+                        </div>
+                        <div
+                            class="flex justify-between items-center border-b border-zinc-200 dark:border-zinc-800/50 pb-1">
+                            <span>Reload AI</span>
+                            <kbd
+                                class="font-sans text-[10px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">Ctrl
+                                + R</kbd>
+                        </div>
+                        <div
+                            class="flex justify-between items-center border-b border-zinc-200 dark:border-zinc-800/50 pb-1">
+                            <span>Direct Jump</span>
+                            <kbd
+                                class="font-sans text-[10px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">Ctrl
+                                + 1-9</kbd>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-zinc-200 dark:border-zinc-800 flex flex-col gap-4">
+                <!-- Version & Update Status -->
+                <div id="update-status-container"
+                    class="flex items-center justify-between bg-zinc-100/50 dark:bg-zinc-950/50 p-4 rounded-xl border border-zinc-200/50 dark:border-zinc-800/50">
+                    <div class="flex flex-col gap-0.5">
+                        <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Current
+                            Version</span>
+                        <div class="flex items-center gap-2">
+                            <span id="help-version-text"
+                                class="text-sm font-medium text-zinc-800 dark:text-zinc-200">Checking...</span>
+                            <span id="version-status-badge"
+                                class="hidden text-[10px] font-bold px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">Up
+                                to date</span>
+                        </div>
+                    </div>
+                    <button id="update-action-btn"
+                        class="hidden px-4 py-2 text-xs font-bold bg-green-600 hover:bg-green-500 text-white rounded-lg transition-all shadow-lg shadow-green-900/20"
+                        onclick="restartAndInstall()">
+                        Download & Restart
+                    </button>
+                </div>
+
+                <div class="flex justify-between items-center mt-2">
+                    <button onclick="openAboutModal()"
+                        class="text-xs text-zinc-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors uppercase tracking-widest font-bold">
+                        Learn about Seizia
+                    </button>
+                    <button onclick="closeHelpModal()"
+                        class="px-6 py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white font-medium transition-all">
+                        Got it
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- License Modal -->
+    <div id="license-modal"
+        class="hidden fixed inset-0 bg-[#f3eee6]/80 dark:bg-[#0a0b0d]/80 backdrop-blur-sm z-[160] flex items-center justify-center animate-fade-in">
+        <div class="shop-dialog p-7 w-full max-w-[440px] mx-4">
+            <div class="flex items-start justify-between gap-3 mb-5">
+                <div>
+                    <h3 class="shop-title text-3xl text-zinc-900 dark:text-zinc-50">License</h3>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
+                        Free runs three AIs. Pro unlocks Ask All, Split, and your prompt library.
+                    </p>
+                </div>
+                <button type="button" onclick="closeLicenseModal()"
+                    class="text-zinc-400 hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-white transition-colors shrink-0"
+                    aria-label="Close license">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div id="license-status-card"
+                class="mb-5 p-4 border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-950/40">
+                <div class="flex items-center justify-between gap-3">
+                    <div>
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Current plan</p>
+                        <p id="license-plan-label" class="shop-title text-2xl text-zinc-900 dark:text-zinc-50 mt-0.5">Free</p>
+                    </div>
+                    <span id="license-plan-badge"
+                        class="text-[10px] font-bold uppercase tracking-wider px-2 py-1 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
+                        Free
+                    </span>
+                </div>
+                <p id="license-key-meta" class="mt-3 text-xs text-zinc-500 dark:text-zinc-400 font-mono break-all"></p>
+                <p id="license-message" class="mt-2 text-xs text-zinc-600 dark:text-zinc-400 hidden"></p>
+            </div>
+
+            <div id="license-activate-panel" class="space-y-3">
+                <label for="license-key-input" class="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+                    License key
+                </label>
+                <input id="license-key-input" type="text" autocomplete="off" spellcheck="false"
+                    placeholder="SEIZIA-XXXX-XXXX-XXXX"
+                    class="shop-field w-full h-11 px-3 text-sm text-zinc-900 dark:text-zinc-200 outline-none font-mono">
+                <div class="flex flex-wrap gap-2">
+                    <button id="license-activate-btn" type="button" onclick="activateLicenseKey()"
+                        class="shop-ask h-10 px-4 bg-seizia hover:bg-seizia-hover text-white text-xs font-bold transition-all">
+                        Activate
+                    </button>
+                    <button id="license-buy-btn" type="button" onclick="openLicenseCheckout()"
+                        class="h-10 px-4 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-200 text-xs font-bold uppercase tracking-wider hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                        Buy Pro
+                    </button>
+                </div>
+            </div>
+
+            <div id="license-pro-actions" class="hidden flex flex-wrap gap-2 mt-1">
+                <button type="button" onclick="clearLicenseKey()"
+                    class="h-10 px-4 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 text-xs font-bold uppercase tracking-wider hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                    Remove license
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div id="about-modal"
+        class="hidden fixed inset-0 bg-[#f3eee6]/90 dark:bg-[#0a0b0d]/90 backdrop-blur-md z-[200] flex items-center justify-center animate-fade-in">
+        <div
+            class="shop-dialog p-10 w-full max-w-[450px] mx-4 text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-seizia">
+            </div>
+
+            <div class="mb-6">
+                <div
+                    class="shop-icon-frame w-20 h-20 mx-auto flex items-center justify-center mb-4 overflow-hidden">
+                    <img src="icon.png" alt="Seizia" class="w-full h-full object-cover">
+                </div>
+                <h3 class="shop-title text-4xl text-zinc-900 dark:text-zinc-50">Seizia</h3>
+                <p id="about-version" class="text-zinc-500 font-medium text-sm">Version ---</p>
+            </div>
+
+            <div class="space-y-4 mb-8">
+                <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                    Designed and built with passion by <span
+                        class="text-zinc-900 dark:text-white font-bold">Cypher1984</span>.
+                </p>
+                <div class="flex flex-col gap-2">
+                    <a href="https://cypher1984.xyz" target="_blank"
+                        onclick="event.preventDefault(); window.omni.openExternal('https://cypher1984.xyz')"
+                        class="shop-ask inline-flex items-center justify-center gap-2 py-3 px-6 bg-seizia hover:bg-seizia-hover text-white font-bold transition-all">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="2" y1="12" x2="22" y2="12" />
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                        </svg>
+                        cypher1984.xyz
+                    </a>
+                </div>
+            </div>
+
+            <button onclick="closeAboutModal()"
+                class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 text-xs font-bold uppercase tracking-widest transition-colors">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Prompts library -->
+    <div id="prompts-modal"
+        class="hidden fixed inset-0 bg-[#f3eee6]/80 dark:bg-[#0a0b0d]/80 backdrop-blur-sm z-[150] flex items-center justify-center animate-fade-in">
+        <div
+            class="shop-dialog p-6 w-full max-w-[780px] mx-4 h-[86vh] max-h-[86vh] min-h-0 flex flex-col">
+            <div class="flex items-center justify-between gap-3 mb-4">
+                <h3 class="shop-title text-2xl text-zinc-900 dark:text-zinc-50">Prompt library</h3>
+                <button id="prompts-close-btn" type="button"
+                    class="text-zinc-400 hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-white transition-colors">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div id="prompts-nav" class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div class="flex items-center bg-zinc-100 dark:bg-zinc-800 rounded-lg p-0.5">
+                    <button id="prompts-tab-library" type="button"
+                        class="px-3 py-1.5 rounded-md text-xs font-bold border bg-seizia text-white border-seizia">Library</button>
+                    <button id="prompts-tab-mine" type="button"
+                        class="px-3 py-1.5 rounded-md text-xs font-bold border bg-transparent text-zinc-600 dark:text-zinc-400 border-transparent">My prompts</button>
+                    <button id="prompts-tab-categories" type="button"
+                        class="px-3 py-1.5 rounded-md text-xs font-bold border bg-transparent text-zinc-600 dark:text-zinc-400 border-transparent">Categories</button>
+                </div>
+                <button id="prompts-new-btn" type="button"
+                    class="hidden h-8 px-3 rounded-lg bg-seizia hover:bg-seizia-hover text-white text-xs font-bold whitespace-nowrap inline-flex items-center gap-1.5">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    Add prompt
+                </button>
+            </div>
+
+            <div id="prompts-browse" class="flex flex-col min-h-0 flex-1">
+                <div class="flex flex-wrap items-center gap-2 mb-4">
+                    <input id="prompts-search" type="search" placeholder="Search prompts..."
+                        class="flex-1 min-w-[10rem] h-9 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-lg px-3 text-sm text-zinc-900 dark:text-zinc-300 outline-none">
+                    <select id="prompts-category"
+                        class="h-9 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-lg px-2 text-sm text-zinc-900 dark:text-zinc-300 outline-none">
+                    </select>
+                </div>
+
+                <div id="prompts-list"
+                    class="grid grid-cols-1 sm:grid-cols-2 gap-3 content-start items-start overflow-y-auto custom-scrollbar pr-1 flex-1 min-h-0"></div>
+                <div id="prompts-empty" class="hidden text-center py-10">
+                    <p id="prompts-empty-text" class="text-sm text-zinc-500"></p>
+                    <button id="prompts-empty-new-btn" type="button"
+                        class="hidden mt-4 h-9 px-4 rounded-lg bg-seizia hover:bg-seizia-hover text-white text-xs font-bold inline-flex items-center gap-1.5">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                        Add prompt
+                    </button>
+                </div>
+            </div>
+
+            <div id="prompt-editor" class="hidden flex flex-col min-h-0 flex-1 gap-3">
+                <h4 id="prompt-editor-title" class="text-sm font-bold text-zinc-900 dark:text-white shrink-0">New prompt</h4>
+                <input id="prompt-title-input" type="text" placeholder="Title"
+                    class="w-full h-10 shrink-0 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-lg px-3 text-zinc-900 dark:text-zinc-300 outline-none">
+                <div class="flex flex-col gap-2 shrink-0">
+                    <select id="prompt-category-input"
+                        class="w-full h-10 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-lg px-3 text-zinc-900 dark:text-zinc-300 outline-none">
+                    </select>
+                    <input id="prompt-category-custom" type="text" maxlength="40" placeholder="New category name"
+                        class="hidden w-full h-10 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-lg px-3 text-zinc-900 dark:text-zinc-300 outline-none">
+                </div>
+                <textarea id="prompt-body-input" placeholder="Write the prompt..."
+                    class="w-full flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-lg p-3 text-sm text-zinc-900 dark:text-zinc-300 outline-none resize-none"></textarea>
+                <div class="flex justify-end gap-2 shrink-0">
+                    <button id="prompt-editor-cancel" type="button"
+                        class="px-4 py-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700">Cancel</button>
+                    <button id="prompt-editor-save" type="button"
+                        class="px-4 py-2 rounded-lg bg-seizia hover:bg-seizia-hover text-white font-bold">Save prompt</button>
+                </div>
+            </div>
+
+            <div id="prompts-categories-panel" class="hidden flex flex-col min-h-0 flex-1 gap-4">
+                <p class="text-xs text-zinc-500">Add, rename, or delete categories. <strong>Uncategorized</strong> is the default and cannot be changed. Deleting a category moves its prompts there.</p>
+                <div class="flex gap-2">
+                    <input id="prompts-category-add-name" type="text" maxlength="40" placeholder="New category"
+                        class="flex-1 h-10 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-lg px-3 text-sm text-zinc-900 dark:text-zinc-300 outline-none">
+                    <button id="prompts-category-add-btn" type="button"
+                        class="h-10 px-4 rounded-lg bg-seizia hover:bg-seizia-hover text-white text-xs font-bold whitespace-nowrap">Add</button>
+                </div>
+                <div id="prompts-category-list" class="flex-1 min-h-0 overflow-y-auto custom-scrollbar flex flex-col gap-2"></div>
+            </div>
+
+            <div id="prompt-send-chooser" class="hidden flex flex-col min-h-0 flex-1 gap-4">
+                <h4 class="text-sm font-bold text-zinc-900 dark:text-white shrink-0">Send this prompt</h4>
+                <p class="text-sm text-zinc-600 dark:text-zinc-400 shrink-0">Edit the text if you want, then send it.</p>
+                <div id="prompt-target-row" class="flex flex-col sm:flex-row gap-2 shrink-0">
+                    <button id="prompt-target-active" type="button"
+                        class="prompt-target-selected flex-1 px-4 py-2.5 rounded-lg text-sm font-medium">
+                        <span id="prompt-send-active-label">Active AI</span>
+                    </button>
+                    <button id="prompt-target-all" type="button"
+                        class="flex-1 px-4 py-2.5 rounded-lg text-sm font-medium">
+                        All AIs
+                    </button>
+                </div>
+                <textarea id="prompt-send-text" placeholder="Write or edit the prompt..."
+                    class="w-full flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-lg p-3 text-sm text-zinc-900 dark:text-zinc-300 outline-none resize-none custom-scrollbar"></textarea>
+                <div class="flex items-center justify-between gap-2 shrink-0">
+                    <button id="prompt-send-cancel" type="button"
+                        class="text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200">Cancel</button>
+                    <button id="prompt-send-confirm" type="button"
+                        class="px-5 py-2 rounded-lg bg-seizia hover:bg-seizia-hover text-white text-sm font-bold">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="prompts-catalog.js"></script>
+    <script src="renderer.js"></script>
+    <script src="prompts-library.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,728 @@
+/* Custom drag region for Electron */
+.drag-region {
+    -webkit-app-region: drag;
+}
+
+.no-drag {
+    -webkit-app-region: no-drag;
+}
+
+/* Hide scrollbars */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Custom Scrollbar for Modals */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #3a3834;
+    border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #5c564c;
+}
+
+/* Animations */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.3s ease-out forwards;
+}
+
+@keyframes curtain-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes curtain-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes curtain-pulse {
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes curtain-dots {
+    0%,
+    20% {
+        content: '';
+    }
+
+    25%,
+    45% {
+        content: '.';
+    }
+
+    50%,
+    70% {
+        content: '..';
+    }
+
+    75%,
+    100% {
+        content: '...';
+    }
+}
+
+.view-curtain-status {
+    animation: curtain-in 0.35s ease-out;
+}
+
+.view-curtain-spinner {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 9999px;
+    border: 2px solid #d8cfc0;
+    border-top-color: #0066FF;
+    animation: curtain-spin 0.8s linear infinite;
+}
+
+html.dark .view-curtain-spinner {
+    border-color: #2a2d33;
+    border-top-color: #0066FF;
+}
+
+.view-curtain-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #7a7368;
+    animation: curtain-pulse 1.6s ease-in-out infinite;
+}
+
+html.dark .view-curtain-label {
+    color: #9a9286;
+}
+
+.view-curtain-dots::after {
+    content: '';
+    display: inline-block;
+    width: 1.1em;
+    text-align: left;
+    animation: curtain-dots 1.4s infinite;
+}
+
+body {
+    overflow: hidden;
+}
+
+.icon-btn {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    border: 1px solid;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.icon-btn:active {
+    transform: scale(0.95);
+}
+
+html:not(.dark) .icon-btn {
+    background: #ebe4d4;
+    border-color: #d8cfc0;
+    color: #5c564c;
+}
+
+html.dark .icon-btn {
+    background: #14161a;
+    border-color: #2a2d33;
+    color: #9a9286;
+}
+
+html:not(.dark) .icon-btn:hover {
+    background: #d8cfc0;
+    color: #1a1814;
+}
+
+html.dark .icon-btn:hover {
+    background: #22252b;
+    color: #ebe4d4;
+}
+
+.icon-btn.is-active,
+html.dark .icon-btn.is-active,
+html:not(.dark) .icon-btn.is-active {
+    background: #0066FF;
+    border-color: #0066FF;
+    color: #fff;
+    box-shadow: none;
+}
+
+.icon-btn.is-active:hover {
+    background: #1a75ff;
+    border-color: #1a75ff;
+    color: #fff;
+}
+
+.logo-mark {
+    filter: brightness(0) invert(12%);
+}
+
+html.dark .logo-mark {
+    filter: brightness(0) invert(93%) sepia(8%);
+}
+
+#tabs .tab-btn {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: 2rem;
+    padding: 0 0.625rem;
+    min-width: 120px;
+    max-width: 180px;
+    margin: 0;
+    border: 0;
+    border-radius: 2px;
+    font: inherit;
+    cursor: pointer;
+    user-select: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    /* Never paint the clickable node: Linux GTK overlays :active on it. */
+    background: transparent !important;
+    box-shadow: none !important;
+    filter: none !important;
+    transition: none !important;
+}
+
+#tabs .tab-btn:hover,
+#tabs .tab-btn:focus,
+#tabs .tab-btn:focus-visible,
+#tabs .tab-btn:active,
+#tabs .tab-btn.is-on {
+    background: transparent !important;
+    box-shadow: none !important;
+    filter: none !important;
+    outline: none !important;
+}
+
+#tabs .tab-face {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+#tabs .tab-btn img.tab-favicon {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 0.25rem;
+    margin-right: 0.5rem;
+    opacity: 1;
+}
+
+html:not(.dark) #tabs .tab-btn {
+    color: #5c564c;
+}
+
+html:not(.dark) #tabs .tab-face {
+    background: #ebe4d4;
+}
+
+html:not(.dark) #tabs .tab-btn:hover {
+    color: #1a1814;
+}
+
+html:not(.dark) #tabs .tab-btn:hover .tab-face {
+    background: #d8cfc0;
+}
+
+html:not(.dark) #tabs .tab-btn.is-on {
+    color: #1a1814;
+}
+
+html:not(.dark) #tabs .tab-btn.is-on .tab-face,
+html:not(.dark) #tabs .tab-btn.is-on:hover .tab-face,
+html:not(.dark) #tabs .tab-btn.is-on:focus .tab-face,
+html:not(.dark) #tabs .tab-btn.is-on:active .tab-face {
+    background: #d0c6b4;
+}
+
+html.dark #tabs .tab-btn {
+    color: #9a9286;
+}
+
+html.dark #tabs .tab-face {
+    background: #14161a;
+}
+
+html.dark #tabs .tab-btn:hover {
+    color: #ebe4d4;
+}
+
+html.dark #tabs .tab-btn:hover .tab-face {
+    background: #22252b;
+}
+
+html.dark #tabs .tab-btn.is-on {
+    color: #ebe4d4;
+}
+
+html.dark #tabs .tab-btn.is-on .tab-face,
+html.dark #tabs .tab-btn.is-on:hover .tab-face,
+html.dark #tabs .tab-btn.is-on:focus .tab-face,
+html.dark #tabs .tab-btn.is-on:active .tab-face {
+    background: #2a2d33;
+}
+
+#tabs .tab-btn .tab-name {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    text-align: left;
+}
+
+#tabs .tab-btn .tab-actions {
+    display: flex;
+    align-items: center;
+    margin-left: 4px;
+}
+
+#tabs .tab-btn .reload-tab,
+#tabs .tab-btn .close-tab {
+    display: flex;
+    padding: 4px;
+    border-radius: 6px;
+    color: inherit;
+    opacity: 0.7;
+}
+
+#tabs .tab-btn .reload-tab {
+    opacity: 0;
+}
+
+#tabs .tab-btn:hover .reload-tab {
+    opacity: 0.7;
+}
+
+#tabs .tab-btn .close-tab:hover {
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.12);
+}
+
+#prompt-editor.hidden,
+#prompts-browse.hidden,
+#prompts-empty.hidden,
+#prompt-send-chooser.hidden,
+#prompts-categories-panel.hidden,
+#prompts-nav.hidden,
+#prompt-category-custom.hidden {
+    display: none !important;
+}
+
+#prompt-editor:not(.hidden) {
+    display: flex !important;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+#prompt-send-chooser:not(.hidden) {
+    display: flex !important;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+#prompt-body-input,
+#prompt-send-text {
+    flex: 1 1 auto;
+    min-height: 8rem;
+    height: auto;
+}
+
+.prompt-card {
+    height: 14.5rem;
+    min-height: 14.5rem;
+    max-height: 14.5rem;
+    overflow: hidden;
+}
+
+.prompt-card-excerpt {
+    flex: 1 1 0;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.prompt-card-body {
+    margin: 0;
+    overflow: hidden;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    max-height: 5rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-word;
+}
+
+#prompt-send-chooser .prompt-target-selected {
+    background: #0066FF;
+    color: #fff;
+}
+
+html.dark #prompt-send-chooser button:not(.prompt-target-selected)#prompt-target-active,
+html.dark #prompt-send-chooser button:not(.prompt-target-selected)#prompt-target-all {
+    background: #27272a;
+    color: #e4e4e7;
+}
+
+html:not(.dark) #prompt-send-chooser button:not(.prompt-target-selected)#prompt-target-active,
+html:not(.dark) #prompt-send-chooser button:not(.prompt-target-selected)#prompt-target-all {
+    background: #f4f4f5;
+    color: #18181b;
+}
+
+/* Keep the welcome page usable when the window is short */
+@media (max-height: 720px) {
+    #app-launcher .launcher-body {
+        justify-content: flex-start;
+    }
+}
+
+*:focus {
+    outline: none;
+}
+
+*:focus-visible {
+    outline: 2px solid #0066FF;
+    outline-offset: 2px;
+}
+
+button:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible) {
+    outline: none;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.split-pick-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 2px;
+    border: 1px solid #d8cfc0;
+    background: #f3eee6;
+    color: #1a1814;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+html.dark .split-pick-btn {
+    border-color: #2a2d33;
+    background: #0a0b0d;
+    color: #ebe4d4;
+}
+
+.split-pick-btn:hover {
+    border-color: #0066FF;
+}
+
+.split-pick-btn.is-picked {
+    border-color: #0066FF;
+    background: rgba(0, 102, 255, 0.1);
+}
+
+.split-pick-btn img {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.split-pick-slot {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #0066FF;
+    flex-shrink: 0;
+}
+
+/* Workshop chrome — same voice as the landing */
+.shop-title {
+    font-family: "Big Shoulders Display", Impact, sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+}
+
+.shop-rail {
+    background: #f3eee6;
+    border-bottom: 1px dashed #d8cfc0;
+}
+
+html.dark .shop-rail {
+    background: #0a0b0d;
+    border-bottom-color: #2a2d33;
+}
+
+.shop-rail .controls {
+    border-left: 1px dashed #d8cfc0;
+}
+
+html.dark .shop-rail .controls {
+    border-left-color: #2a2d33;
+}
+
+.shop-add {
+    background: #1a1814;
+    border: 1px solid #1a1814;
+}
+
+html.dark .shop-add {
+    background: #ebe4d4;
+    border-color: #ebe4d4;
+}
+
+.shop-add:hover {
+    filter: brightness(1.08);
+}
+
+.shop-ask {
+    border: 1px solid #0066FF;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.shop-floor {
+    background:
+        radial-gradient(900px 380px at 90% -10%, rgba(0, 102, 255, 0.1), transparent 55%),
+        #f3eee6;
+}
+
+html.dark .shop-floor {
+    background:
+        radial-gradient(900px 380px at 90% -10%, rgba(0, 102, 255, 0.14), transparent 55%),
+        #0a0b0d;
+}
+
+.launcher-grain {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+#app-launcher {
+    position: fixed;
+}
+
+.launcher-stage,
+.launcher-body {
+    position: relative;
+    z-index: 1;
+}
+
+.launcher-hero {
+    position: relative;
+}
+
+.launcher-stencil {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 0.45rem;
+    color: #0066FF;
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.launcher-title {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 1.6rem;
+    font-family: "Big Shoulders Display", Impact, sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.6rem, 6vw, 4.8rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: #1a1814;
+}
+
+html.dark .launcher-title {
+    color: #ebe4d4;
+}
+
+.shop-stamp,
+.shop-icon-close,
+.shop-kbd,
+.shop-slot,
+.shop-icon-frame {
+    border: 1px dashed #d8cfc0;
+    border-radius: 2px;
+    background: rgba(235, 228, 212, 0.45);
+}
+
+html.dark .shop-stamp,
+html.dark .shop-icon-close,
+html.dark .shop-kbd,
+html.dark .shop-slot,
+html.dark .shop-icon-frame {
+    border-color: #2a2d33;
+    background: rgba(20, 22, 26, 0.7);
+}
+
+.shop-dialog {
+    background: #f3eee6;
+    border: 1px solid #d8cfc0;
+    border-radius: 2px;
+    box-shadow: 0 28px 60px rgba(26, 24, 20, 0.18);
+}
+
+.shop-dialog button {
+    border-radius: 2px;
+}
+
+html.dark .shop-dialog {
+    background: #14161a;
+    border-color: #2a2d33;
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.45);
+}
+
+.shop-field,
+.shop-dialog input,
+.shop-dialog textarea,
+.shop-dialog select {
+    background: #ebe4d4;
+    border: 1px solid #d8cfc0;
+    border-radius: 2px;
+    color: inherit;
+}
+
+html.dark .shop-field,
+html.dark .shop-dialog input,
+html.dark .shop-dialog textarea,
+html.dark .shop-dialog select {
+    background: #0a0b0d;
+    border-color: #2a2d33;
+}
+
+.shop-field:focus,
+.shop-dialog input:focus,
+.shop-dialog textarea:focus,
+.shop-dialog select:focus {
+    border-color: #0066FF;
+}
+
+.ai-tile {
+    border: 1px solid #d8cfc0;
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+html.dark .ai-tile {
+    border-color: #2a2d33;
+    background: rgba(20, 22, 26, 0.72);
+}
+
+.ai-tile.is-open:hover {
+    border-color: #0066FF;
+    transform: translateY(-2px);
+}
+
+.ai-tile.is-used,
+.ai-tile.is-blocked {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.ai-tile.is-blocked {
+    cursor: pointer;
+}
+
+.ai-tile .ai-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 2px;
+}
+
+.prompt-card {
+    border-radius: 2px;
+    background: #ebe4d4;
+    border: 1px solid #d8cfc0;
+}
+
+html.dark .prompt-card {
+    background: #0a0b0d;
+    border-color: #2a2d33;
+}
+
+#help-modal kbd {
+    font-family: inherit;
+    border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ai-tile.is-open:hover {
+        transform: none;
+    }
+}

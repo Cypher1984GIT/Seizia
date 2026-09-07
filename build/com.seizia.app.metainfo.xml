@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.seizia.app</id>
+  <name>Seizia</name>
+  <summary>A multi-AI browser interface</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>ISC</project_license>
+  <developer id="com.seizia">
+    <name>Cypher1984</name>
+  </developer>
+  <description>
+    <p>
+      Seizia keeps multiple AI chats in a single window so you can switch between
+      tools without losing context.
+    </p>
+  </description>
+  <launchable type="desktop-id">seizia.desktop</launchable>
+  <url type="homepage">https://github.com/Cypher1984GIT/Seizia</url>
+  <pkgname>seizia</pkgname>
+  <provides>
+    <binary>seizia</binary>
+  </provides>
+  <icon type="stock">seizia</icon>
+  <categories>
+    <category>Utility</category>
+    <category>Network</category>
+  </categories>
+  <content_rating type="oars-1.1"/>
+</component>

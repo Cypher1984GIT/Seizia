@@ -1,0 +1,115 @@
+{
+  "name": "seizia",
+  "version": "1.6.1",
+  "description": "Seizia - A multi-AI browser interface",
+  "homepage": "https://github.com/Cypher1984GIT/Seizia",
+  "repository": "github:Cypher1984GIT/Seizia",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --check main.js && node --check preload-app.js && node --check preload-view.js && node --check preload-more-menu.js && node --check renderer.js && node --check prompts-catalog.js && node --check prompts-library.js && node --check src/main/windowState.js && node --check src/main/promptStore.js && node --check src/main/moreMenuPopup.js && node --check src/main/security.js && node --check src/main/updater.js && node --check src/main/menu.js && node --check src/main/viewManager.js && node --check src/main/license/config.js && node --check src/main/license/licenseStore.js && node --check src/main/license/licenseService.js",
+    "build": "electron-builder",
+    "publish": "electron-builder --publish always"
+  },
+  "keywords": [],
+  "author": "Cypher1984 <https://github.com/Cypher1984GIT>",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^39.2.7",
+    "electron-builder": "^26.5.0"
+  },
+  "overrides": {
+    "tar": "^7.5.21",
+    "@electron/rebuild": {
+      "tar": "^6.2.1"
+    }
+  },
+  "build": {
+    "appId": "com.seizia.app",
+    "productName": "Seizia",
+    "icon": "build/icon.png",
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility;Network;WebBrowser;",
+      "executableName": "seizia",
+      "maintainer": "Cypher1984 <https://github.com/Cypher1984GIT>",
+      "icon": "build/icons",
+      "desktop": {
+        "entry": {
+          "Name": "Seizia",
+          "Icon": "/usr/share/icons/hicolor/256x256/apps/seizia.png",
+          "StartupNotify": "true",
+          "StartupWMClass": "Seizia"
+        }
+      }
+    },
+    "deb": {
+      "afterInstall": "build/linux/after-install.sh",
+      "afterRemove": "build/linux/after-remove.sh"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        }
+      ],
+      "category": "public.app-category.utilities",
+      "icon": "build/icon.png"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "extraResources": [
+      {
+        "from": "build/com.seizia.app.metainfo.xml",
+        "to": "metainfo.xml"
+      },
+      {
+        "from": "build/icons/256x256.png",
+        "to": "seizia.png"
+      }
+    ],
+    "files": [
+      "main.js",
+      "index.html",
+      "error.html",
+      "icon.png",
+      "icon-tray.png",
+      "icon.ico",
+      "logo.png",
+      "build/icons/**/*",
+      "package.json",
+      "preload.js",
+      "preload-app.js",
+      "preload-view.js",
+      "renderer.js",
+      "src/**/*",
+      "styles.css",
+      "tailwind-config.js",
+      "prompts-catalog.js",
+      "prompts-library.js",
+      "more-menu.html",
+      "preload-more-menu.js"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Cypher1984GIT",
+        "repo": "Seizia",
+        "releaseType": "release"
+      }
+    ]
+  },
+  "dependencies": {
+    "electron-log": "^5.4.3",
+    "electron-updater": "^6.6.2"
+  }
+}
