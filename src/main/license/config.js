@@ -11,6 +11,9 @@ module.exports = {
     /** Keep Pro available offline for this long after a successful validate. */
     offlineGraceMs: 14 * 24 * 60 * 60 * 1000,
     maxTabsFree: 3,
-    /** Unpackaged-only key so you can test the Pro UI before Polar is live. */
-    localDevKey: 'SEIZIA-LOCAL-PRO'
+    /**
+     * Unpackaged-only Pro unlock for local testing. Empty by default so no
+     * usable key ships in the source: export SEIZIA_DEV_PRO_KEY to enable it.
+     */
+    devKey: process.env.SEIZIA_DEV_PRO_KEY || ''
 };

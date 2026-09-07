@@ -1053,7 +1053,7 @@ function applyLicenseStatus(status) {
         if (appFeatures.isPro && status.displayKey) {
             keyMeta.textContent = `Key ${status.displayKey}`;
         } else if (status.localDevHint) {
-            keyMeta.textContent = `Dev unlock key: ${status.localDevHint}`;
+            keyMeta.textContent = status.localDevHint;
         } else {
             keyMeta.textContent = 'No license on this computer.';
         }

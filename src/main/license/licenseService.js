@@ -38,7 +38,7 @@ function createLicenseService({ app, store }) {
     }
 
     function allowLocalDevKey(key) {
-        return !app.isPackaged && key === config.localDevKey;
+        return !app.isPackaged && Boolean(config.devKey) && key === config.devKey;
     }
 
     function publicStatus(record, options = {}) {
@@ -58,7 +58,7 @@ function createLicenseService({ app, store }) {
             source: record.source,
             features: getFeatures(active),
             checkoutUrl: config.checkoutUrl,
-            localDevHint: !app.isPackaged && !isConfigured() ? config.localDevKey : null
+            localDevHint: !app.isPackaged && config.devKey ? 'Dev unlock key is set via SEIZIA_DEV_PRO_KEY.' : null
         };
     }
 
