@@ -103,11 +103,7 @@
       "prompts-catalog.js",
       "prompts-library.js",
       "more-menu.html",
-      "preload-more-menu.js",
-      "pro/**/*",
-      "!pro/.git/**",
-      "!pro/.github/**",
-      "!pro/README.md"
+      "preload-more-menu.js"
     ],
     "publish": [
       {

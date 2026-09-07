@@ -17,6 +17,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
+      # One runner at a time: parallel jobs race to create the same release and
+      # end up duplicating it or dropping assets from it.
+      max-parallel: 1
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
@@ -39,10 +42,15 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Configure macOS Signing (Ad-Hoc)
-        if: matrix.os == 'macos-latest'
-        run: echo "CSC_IDENTITY_AUTO_DISCOVERY=false" >> $GITHUB_ENV
+      - name: Check syntax
+        run: npm test
 
+      # macOS ad-hoc signing lives in package.json (mac.identity), not here:
+      # setting CSC_IDENTITY_AUTO_DISCOVERY=false would skip signing entirely
+      # and ship a bundle Gatekeeper reports as damaged on Apple Silicon.
+      #
+      # electron-builder also publishes implicitly the moment it detects CI, so
+      # anything that is not a tag has to opt out explicitly.
       - name: Build and Publish
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -50,6 +58,19 @@ jobs:
           if [[ "${{ startsWith(github.ref, 'refs/tags/') }}" == "true" ]]; then
             npm run build -- --publish always
           else
-            npm run build
+            npm run build -- --publish never
           fi
         shell: bash
+
+      - name: Upload the installers for testing
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: seizia-${{ matrix.os }}
+          path: |
+            dist/*.dmg
+            dist/*.exe
+            dist/*.AppImage
+            dist/*.deb
+          if-no-files-found: error
+          retention-days: 14
