@@ -5,12 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' file: data: https:; script-src 'self' file: 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' file: 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' file: data: https:; connect-src 'self' file: https:;">
-    <script src="https://cdn.tailwindcss.com"></script>
+        content="default-src 'self' file: data:; script-src 'self' file: 'unsafe-inline'; style-src 'self' file: 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' file: data: https://fonts.gstatic.com; img-src 'self' file: data: https://www.google.com https://*.gstatic.com; connect-src 'self' file:;">
     <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="tailwind-config.js"></script>
     <title>Seizia</title>
     <link rel="icon" type="image/png" href="icon.png">
+    <link rel="stylesheet" href="tailwind.css">
     <link rel="stylesheet" href="styles.css">
     <script>
         // Immediately invoke theme check to prevent flicker
