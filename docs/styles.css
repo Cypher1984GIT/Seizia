@@ -1,0 +1,565 @@
+:root {
+    --floor: #0a0b0d;
+    --steel: #14161a;
+    --edge: #2a2d33;
+    --cream: #ebe4d4;
+    --mute: #8f887c;
+    --blue: #0066ff;
+    --blue-ink: #cfe0ff;
+    --display: "Big Shoulders Display", "Impact", "Arial Narrow", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--cream);
+    background:
+        radial-gradient(1200px 520px at 88% -10%, rgba(0, 102, 255, 0.16), transparent 55%),
+        radial-gradient(900px 420px at -10% 30%, rgba(235, 228, 212, 0.05), transparent 50%),
+        var(--floor);
+    font-family: var(--mono);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+}
+
+::selection {
+    background: var(--blue);
+    color: #fff;
+}
+
+a {
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+code {
+    font-family: inherit;
+    color: var(--blue-ink);
+}
+
+.skip {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 20;
+    padding: 0.55rem 0.8rem;
+    background: var(--blue);
+    color: #fff;
+    text-decoration: none;
+}
+
+.skip:focus {
+    top: 1rem;
+}
+
+.grain {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 12;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.rail {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    width: min(1180px, calc(100% - 2.4rem));
+    margin: 0 auto;
+    padding: 1.1rem 0 0.9rem;
+    border-bottom: 1px dashed var(--edge);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    letter-spacing: 0.16em;
+}
+
+.brand span {
+    font-family: var(--display);
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.brand img {
+    width: 44px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.rail nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.35rem 1.15rem;
+}
+
+.rail nav a {
+    text-decoration: none;
+}
+
+.rail nav a:hover,
+.brand:hover,
+.slip a:hover {
+    color: var(--blue-ink);
+}
+
+.lot {
+    margin: 0;
+    padding: 0.35rem 0.55rem;
+    border: 1px dashed var(--edge);
+    color: var(--mute);
+    text-align: right;
+}
+
+.hero {
+    position: relative;
+    width: min(1180px, calc(100% - 2.4rem));
+    margin: 0 auto;
+    padding: 3.2rem 0 4.2rem;
+    display: grid;
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    gap: 2.4rem 2rem;
+    align-items: end;
+}
+
+.ghost {
+    position: absolute;
+    left: -6%;
+    top: 42%;
+    z-index: 0;
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(8rem, 28vw, 22rem);
+    line-height: 0.72;
+    letter-spacing: -0.05em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(235, 228, 212, 0.07);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.hero-copy,
+.crate {
+    position: relative;
+    z-index: 1;
+}
+
+.stencil {
+    margin: 0 0 0.9rem;
+    color: var(--blue);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+.price {
+    font-family: var(--display);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+h1 {
+    margin: 0;
+    max-width: 11ch;
+    font-size: clamp(3.6rem, 8vw, 6.6rem);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    text-shadow: 0 0 28px rgba(10, 11, 13, 0.85);
+}
+
+h1 em {
+    font-style: normal;
+    color: #4d8fff;
+}
+
+.lede,
+.sheet-head p {
+    max-width: 38rem;
+    color: var(--mute);
+}
+
+.lede {
+    margin: 1.35rem 0 1.7rem;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.7rem;
+    padding: 0.55rem 1.05rem;
+    border: 1px solid var(--blue);
+    background: var(--blue);
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    touch-action: manipulation;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--cream);
+    border-color: var(--edge);
+}
+
+.btn:hover {
+    filter: brightness(1.08);
+}
+
+.btn-ghost:hover {
+    border-color: var(--cream);
+    filter: none;
+}
+
+.crate {
+    justify-self: end;
+    width: min(100%, 640px);
+    transform: rotate(-2.1deg) translateY(0.6rem);
+    animation: settle 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.tape {
+    position: absolute;
+    top: -0.7rem;
+    right: 1.1rem;
+    z-index: 2;
+    padding: 0.32rem 0.7rem;
+    background: var(--blue);
+    color: #fff;
+    font-size: 0.64rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.shot {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--edge);
+    background: #111;
+    box-shadow:
+        0 28px 60px rgba(0, 0, 0, 0.45),
+        0 0 0 8px rgba(20, 22, 26, 0.7);
+}
+
+.crate figcaption {
+    margin: 0.75rem 0.2rem 0;
+    color: var(--mute);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+}
+
+.sheet {
+    width: min(1180px, calc(100% - 2.4rem));
+    margin: 0 auto;
+    padding: 3.4rem 0 1.2rem;
+    scroll-margin-top: 1.4rem;
+}
+
+.sheet-head {
+    display: grid;
+    grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+    gap: 1rem 2rem;
+    align-items: end;
+    padding-bottom: 1.3rem;
+    border-bottom: 1px solid var(--edge);
+}
+
+h2 {
+    margin: 0;
+    font-size: clamp(2.6rem, 6vw, 4.6rem);
+    line-height: 0.85;
+    text-transform: uppercase;
+}
+
+.sheet-head p {
+    margin: 0;
+}
+
+.bom {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.bom li {
+    display: grid;
+    grid-template-columns: 3.4rem 8.5rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 1.05rem 0;
+    border-bottom: 1px dashed var(--edge);
+}
+
+.n,
+.price,
+.dest,
+.label h3 {
+    font-variant-numeric: tabular-nums;
+}
+
+.n {
+    color: var(--blue);
+    letter-spacing: 0.14em;
+}
+
+.bom strong {
+    font-family: var(--display);
+    font-size: 1.7rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.bom span:last-child {
+    color: var(--mute);
+}
+
+.stamps,
+.crates {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+    margin-top: 1.6rem;
+}
+
+.stamp,
+.label {
+    padding: 1.3rem 1.25rem 1.2rem;
+    background: var(--steel);
+    border: 1px solid var(--edge);
+}
+
+.stamp header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.stamp h3,
+.label h3 {
+    margin: 0;
+    font-size: 2.6rem;
+    line-height: 0.85;
+    text-transform: uppercase;
+}
+
+/* Each crate carries its own download, so the button fills the box width. */
+.label .btn {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.price {
+    margin: 0;
+    font-size: 3.4rem;
+    line-height: 0.8;
+}
+
+.stamp-hot {
+    border-color: var(--blue);
+    box-shadow: inset 0 0 0 1px var(--blue);
+}
+
+.mark {
+    display: inline-block;
+    margin: 0.85rem 0 1rem;
+    padding: 0.2rem 0.45rem;
+    border: 1px dashed var(--blue);
+    color: var(--blue);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.stamp ul {
+    margin: 0 0 1.2rem;
+    padding: 0;
+    list-style: none;
+    color: var(--mute);
+}
+
+.stamp li + li {
+    margin-top: 0.35rem;
+}
+
+.dest {
+    margin: 0 0 0.35rem;
+    color: var(--blue);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+pre {
+    margin: 1rem 0 0;
+    padding: 0.85rem 0.9rem;
+    overflow: auto;
+    background: #07080a;
+    border: 1px solid var(--edge);
+    color: var(--cream);
+    font-family: inherit;
+    font-size: 0.78rem;
+    line-height: 1.5;
+}
+
+#download .actions {
+    margin-top: 1.4rem;
+}
+
+.slip {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.6rem 1.5rem;
+    width: min(1180px, calc(100% - 2.4rem));
+    margin: 2.4rem auto 0;
+    padding: 1.2rem 0 calc(1.6rem + env(safe-area-inset-bottom));
+    border-top: 1px dashed var(--edge);
+    color: var(--mute);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+}
+
+.slip p {
+    margin: 0;
+}
+
+.hero-copy,
+.sheet-head,
+.bom li,
+.stamp,
+.label {
+    animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-copy { animation-delay: 0.05s; }
+.crate { animation-delay: 0.16s; }
+.sheet-head { animation-delay: 0.08s; }
+.bom li:nth-child(1) { animation-delay: 0.1s; }
+.bom li:nth-child(2) { animation-delay: 0.16s; }
+.bom li:nth-child(3) { animation-delay: 0.22s; }
+.bom li:nth-child(4) { animation-delay: 0.28s; }
+.bom li:nth-child(5) { animation-delay: 0.34s; }
+
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes settle {
+    from {
+        opacity: 0;
+        transform: rotate(-6deg) translateY(28px);
+    }
+    to {
+        opacity: 1;
+        transform: rotate(-2.1deg) translateY(0.6rem);
+    }
+}
+
+:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+    .rail,
+    .hero {
+        grid-template-columns: 1fr;
+    }
+
+    .lot {
+        text-align: left;
+    }
+
+    .rail nav {
+        justify-content: flex-start;
+    }
+
+    .ghost {
+        top: auto;
+        bottom: 8%;
+        font-size: 32vw;
+    }
+
+    .crate {
+        justify-self: stretch;
+        width: 100%;
+        transform: none;
+        animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .sheet-head,
+    .bom li,
+    .stamps,
+    .crates {
+        grid-template-columns: 1fr;
+    }
+
+    .bom li {
+        gap: 0.25rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .hero-copy,
+    .crate,
+    .sheet-head,
+    .bom li,
+    .stamp,
+    .label {
+        animation: none;
+    }
+}

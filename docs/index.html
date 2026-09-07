@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0b0d">
+    <meta name="color-scheme" content="dark">
+    <title>Seizia — Several AIs, One Window</title>
+    <meta name="description" content="A desktop app for Linux, Windows and macOS. ChatGPT, Gemini, Claude and the rest in tabs. Each AI stays its own site. Seizia does not store your chats.">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="rail">
+        <a class="brand" href="#">
+            <img src="logo.png" alt="" width="36" height="36">
+            <span translate="no">Seizia</span>
+        </a>
+        <nav>
+            <a href="#use">What it does</a>
+            <a href="#price">Price</a>
+            <a href="#download">Download</a>
+            <a href="https://github.com/Cypher1984GIT/Seizia">GitHub</a>
+        </nav>
+        <p class="lot">Linux · Windows · macOS</p>
+    </header>
+
+    <main id="main">
+        <section class="hero">
+            <p class="ghost" aria-hidden="true">SEIZIA</p>
+            <div class="hero-copy">
+                <p class="stencil">Desktop app · Not another website</p>
+                <h1>
+                    Several AIs.<br>
+                    <em>One window.</em>
+                </h1>
+                <p class="lede">
+                    <span translate="no">Seizia</span> is a desktop program for Linux, Windows and macOS. You open
+                    <span translate="no">ChatGPT</span>, <span translate="no">Gemini</span>,
+                    <span translate="no">Claude</span>, <span translate="no">Grok</span>
+                    and the others as tabs. Each one keeps its session. You stop hopping
+                    between browser windows.
+                </p>
+                <div class="actions">
+                    <a class="btn" href="#download">Download</a>
+                    <a class="btn btn-ghost" href="https://github.com/Cypher1984GIT/Seizia">View the Code</a>
+                </div>
+            </div>
+            <figure class="crate">
+                <span class="tape">Lot 01</span>
+                <img class="shot" src="screenshot.png" width="1024" height="535" fetchpriority="high" alt="Seizia launcher with Gemini and ChatGPT open, Ask All in the header, and the full AI grid.">
+                <figcaption>The launcher. One tile, one AI. A custom URL works too.</figcaption>
+            </figure>
+        </section>
+
+        <section class="sheet" id="use">
+            <div class="sheet-head">
+                <h2>Bill of materials</h2>
+                <p>
+                    It is not a new model. It is the window that holds the ones you already use.
+                    The chat still lives on chatgpt.com, gemini.google.com, and the rest.
+                    <span translate="no">Seizia</span> does not keep your conversations on a server.
+                </p>
+            </div>
+            <ol class="bom">
+                <li>
+                    <span class="n">01</span>
+                    <strong>Tabs</strong>
+                    <span>Several AIs open at once. Drag to reorder. Sessions survive a restart.</span>
+                </li>
+                <li>
+                    <span class="n">02</span>
+                    <strong>Ask All</strong>
+                    <span>Type once. Every open tab gets the prompt.</span>
+                </li>
+                <li>
+                    <span class="n">03</span>
+                    <strong>Split</strong>
+                    <span>Two AIs side by side. If more than two are open, you pick the pair.</span>
+                </li>
+                <li>
+                    <span class="n">04</span>
+                    <strong>Prompts</strong>
+                    <span>A ready catalog plus your own, stored on disk. Categories included.</span>
+                </li>
+                <li>
+                    <span class="n">05</span>
+                    <strong>Incognito</strong>
+                    <span>A tab that leaves no session. AIs that require a login stay out.</span>
+                </li>
+            </ol>
+        </section>
+
+        <section class="sheet" id="price">
+            <div class="sheet-head">
+                <h2>What it costs</h2>
+                <p>
+                    Nothing, and there is no second tier holding the good parts back.
+                    Ask All, Split, your own prompt library and as many tabs as you
+                    want are all in the build you download.
+                </p>
+            </div>
+            <div class="stamps">
+                <article class="stamp stamp-hot">
+                    <header>
+                        <h3>Free</h3>
+                        <p class="price">$0</p>
+                    </header>
+                    <p class="mark">Everything included</p>
+                    <ul>
+                        <li>As many AIs as you want, in tabs</li>
+                        <li>Ask All and Split View</li>
+                        <li>Prompt catalog plus your own</li>
+                        <li>Incognito, light and dark theme</li>
+                    </ul>
+                    <a class="btn" href="#download">Download</a>
+                </article>
+                <article class="stamp">
+                    <header>
+                        <h3>No catch</h3>
+                    </header>
+                    <p class="mark">By design</p>
+                    <ul>
+                        <li>No account and no sign-up</li>
+                        <li>No trial that runs out</li>
+                        <li>No telemetry, no analytics</li>
+                        <li>Each chat stays on its own AI's site</li>
+                    </ul>
+                    <a class="btn btn-ghost" href="https://github.com/Cypher1984GIT/Seizia">Read the code</a>
+                </article>
+            </div>
+        </section>
+
+        <section class="sheet" id="download">
+            <div class="sheet-head">
+                <h2>Crates</h2>
+                <p>
+                    Four builds. The <code>.deb</code> puts
+                    <span translate="no">Seizia</span> in the menu on Debian, Ubuntu, and Mint,
+                    the AppImage runs on any distro, and the Mac disk image covers both
+                    Intel and Apple Silicon. Windows and macOS are not code-signed, so
+                    each system warns you once on the first launch. Read
+                    <a href="https://github.com/Cypher1984GIT/Seizia#first-launch-on-windows-and-macos">what to click</a>.
+                </p>
+            </div>
+            <div class="crates">
+                <article class="label">
+                    <p class="dest">Debian / Ubuntu / Mint</p>
+                    <h3>.deb</h3>
+                    <pre>sudo apt install ./seizia-linux-amd64.deb</pre>
+                    <a class="btn"
+                        href="https://github.com/Cypher1984GIT/Seizia/releases/latest/download/seizia-linux-amd64.deb">Download
+                        .deb</a>
+                </article>
+                <article class="label">
+                    <p class="dest">Any Linux distro</p>
+                    <h3>AppImage</h3>
+                    <pre>chmod +x Seizia-linux-x86_64.AppImage && ./Seizia-linux-x86_64.AppImage</pre>
+                    <a class="btn"
+                        href="https://github.com/Cypher1984GIT/Seizia/releases/latest/download/Seizia-linux-x86_64.AppImage">Download
+                        AppImage</a>
+                </article>
+                <article class="label">
+                    <p class="dest">Windows 10 / 11</p>
+                    <h3>.exe</h3>
+                    <pre>Seizia-Setup-windows.exe · More info → Run anyway</pre>
+                    <a class="btn"
+                        href="https://github.com/Cypher1984GIT/Seizia/releases/latest/download/Seizia-Setup-windows.exe">Download
+                        for Windows</a>
+                </article>
+                <article class="label">
+                    <p class="dest">macOS · Intel &amp; Apple Silicon</p>
+                    <h3>.dmg</h3>
+                    <pre>Drag to Applications · Privacy &amp; Security → Open Anyway</pre>
+                    <a class="btn"
+                        href="https://github.com/Cypher1984GIT/Seizia/releases/latest/download/Seizia-macos-universal.dmg">Download
+                        for macOS</a>
+                </article>
+            </div>
+            <div class="actions">
+                <a class="btn" href="https://github.com/Cypher1984GIT/Seizia/releases">GitHub Releases</a>
+                <a class="btn btn-ghost" href="https://github.com/Cypher1984GIT/Seizia">Repository</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="slip">
+        <p>Made by <a href="https://cypher1984.xyz">Cypher1984</a></p>
+        <p><span translate="no">Seizia</span> never sees your chats. Each AI bills its own.</p>
+    </footer>
+</body>
+
+</html>
