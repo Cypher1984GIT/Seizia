@@ -105,7 +105,6 @@ window.addEventListener('keydown', (e) => {
             { id: 'alert-modal', close: closeAlertModal },
             { id: 'broadcast-modal', close: closeBroadcastModal },
             { id: 'custom-app-modal', close: closeCustomModal },
-            { id: 'license-modal', close: closeLicenseModal },
             { id: 'help-modal', close: closeHelpModal },
             { id: 'about-modal', close: closeAboutModal },
             { id: 'split-picker-modal', close: closeSplitPicker }
@@ -230,14 +229,6 @@ function createTab(name, url, isIncognito = false, isActive = false, options = {
     if (existingBtn) {
         existingBtn.click();
         return existingBtn;
-    }
-
-    if (!options.bypassLicenseGate) {
-        const openCount = tabsContainer.querySelectorAll('.tab-btn').length;
-        if (openCount >= (appFeatures.maxTabs || 3)) {
-            openLicenseModal('Free includes up to three AI tabs. Activate Pro for more.');
-            return null;
-        }
     }
 
     const btn = document.createElement('div');
@@ -547,7 +538,7 @@ window.onload = () => {
                     // We construct the ID effectively again here to check match
                     const id = buildTabId(t.name, t.url, t.isIncognito);
                     const isActive = (lastActive === id);
-                    createTab(t.name, t.url, t.isIncognito, isActive, { bypassLicenseGate: true });
+                    createTab(t.name, t.url, t.isIncognito, isActive);
                 });
                 loaded = true;
 
@@ -678,11 +669,6 @@ function toggleSplit() {
             omni.send('toggle-split', { enabled: false });
             btn.classList.remove('active', 'is-active');
             checkEmptyState();
-            return;
-        }
-
-        if (!appFeatures.splitView) {
-            openLicenseModal('Split View is a Pro feature. Paste your license to unlock it.');
             return;
         }
 
@@ -927,11 +913,6 @@ function openBroadcastModal() {
     if (tabsContainer.children.length < 2) return; // Silent return if not enough tabs
     if (splitBtn && splitBtn.classList.contains('active')) return; // Silent return if split mode is on
 
-    if (!appFeatures.askAll) {
-        openLicenseModal('Ask All is a Pro feature. Paste your license to unlock it.');
-        return;
-    }
-
     omni.send('hide-current-view');
     const modal = document.getElementById('broadcast-modal');
     modal.classList.remove('hidden');
@@ -965,7 +946,6 @@ function restoreViewIfIdle() {
     if (launcher && !launcher.classList.contains('hidden')) return;
     if (!document.getElementById('help-modal').classList.contains('hidden')) return;
     if (!document.getElementById('about-modal').classList.contains('hidden')) return;
-    if (!document.getElementById('license-modal')?.classList.contains('hidden')) return;
     if (!document.getElementById('confirmation-modal').classList.contains('hidden')) return;
     if (!document.getElementById('broadcast-modal').classList.contains('hidden')) return;
     if (!document.getElementById('custom-app-modal').classList.contains('hidden')) return;
@@ -1003,193 +983,8 @@ function toggleMoreMenu(event) {
 document.getElementById('more-btn')?.addEventListener('click', toggleMoreMenu);
 omni.on('more-menu-action', (action) => {
     if (action === 'help') openHelpModal();
-    if (action === 'license') openLicenseModal();
     if (action === 'reset') resetDefaults();
 });
-
-/* License Modal */
-// Seizia is free, so these defaults are already permissive: if the status
-// never arrives from the main process, the app must not silently limit itself.
-let appFeatures = {
-    isPro: false,
-    maxTabs: Number.POSITIVE_INFINITY,
-    askAll: true,
-    splitView: true,
-    myPrompts: true,
-    checkoutUrl: 'https://github.com/Cypher1984GIT/Seizia'
-};
-let licenseBusy = false;
-
-function applyLicenseStatus(status) {
-    if (!status || typeof status !== 'object') return;
-    if (status.features) {
-        appFeatures = { ...appFeatures, ...status.features };
-    } else if (typeof status.isPro === 'boolean') {
-        appFeatures.isPro = status.isPro;
-        appFeatures.maxTabs = status.isPro ? Number.POSITIVE_INFINITY : 3;
-        appFeatures.askAll = status.isPro;
-        appFeatures.splitView = status.isPro;
-        appFeatures.myPrompts = status.isPro;
-    }
-    if (status.checkoutUrl) {
-        appFeatures.checkoutUrl = status.checkoutUrl;
-    }
-
-    const planLabel = document.getElementById('license-plan-label');
-    const badge = document.getElementById('license-plan-badge');
-    const keyMeta = document.getElementById('license-key-meta');
-    const message = document.getElementById('license-message');
-    const activatePanel = document.getElementById('license-activate-panel');
-    const proActions = document.getElementById('license-pro-actions');
-    const keyInput = document.getElementById('license-key-input');
-
-    if (planLabel) planLabel.textContent = appFeatures.isPro ? 'Pro' : 'Free';
-    if (badge) {
-        badge.textContent = appFeatures.isPro ? 'Pro' : 'Free';
-        badge.className = appFeatures.isPro
-            ? 'text-[10px] font-bold uppercase tracking-wider px-2 py-1 border border-seizia/40 text-seizia bg-seizia/10'
-            : 'text-[10px] font-bold uppercase tracking-wider px-2 py-1 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300';
-    }
-
-    if (keyMeta) {
-        if (appFeatures.isPro && status.displayKey) {
-            keyMeta.textContent = `Key ${status.displayKey}`;
-        } else if (status.localDevHint) {
-            keyMeta.textContent = status.localDevHint;
-        } else {
-            keyMeta.textContent = 'No license on this computer.';
-        }
-    }
-
-    if (message) {
-        const text = status.error || status.warning || message.dataset.hint || '';
-        message.textContent = text;
-        message.classList.toggle('hidden', !text);
-        message.classList.toggle('text-red-600', Boolean(status.error));
-        message.classList.toggle('dark:text-red-400', Boolean(status.error));
-        message.classList.toggle('text-amber-700', Boolean(status.warning) && !status.error);
-        message.classList.toggle('dark:text-amber-400', Boolean(status.warning) && !status.error);
-    }
-
-    if (activatePanel) activatePanel.classList.toggle('hidden', appFeatures.isPro);
-    if (proActions) {
-        proActions.classList.toggle('hidden', !appFeatures.isPro);
-        proActions.classList.toggle('flex', appFeatures.isPro);
-    }
-    if (keyInput && appFeatures.isPro) keyInput.value = '';
-
-    document.getElementById('ask-all-btn')?.classList.toggle('opacity-60', !appFeatures.askAll);
-    document.getElementById('split-btn')?.classList.toggle('opacity-60', !appFeatures.splitView);
-}
-
-async function refreshLicenseStatus() {
-    try {
-        const status = await omni.invoke('license:status');
-        applyLicenseStatus(status);
-        return status;
-    } catch (error) {
-        console.error('Failed to load license status:', error);
-        return null;
-    }
-}
-
-function openLicenseModal(hint) {
-    closeMoreMenu({ restoreView: false });
-    omni.send('hide-current-view');
-    const modal = document.getElementById('license-modal');
-    const message = document.getElementById('license-message');
-    if (message) {
-        if (hint) {
-            message.dataset.hint = hint;
-            message.textContent = hint;
-            message.classList.remove('hidden', 'text-red-600', 'dark:text-red-400');
-            message.classList.add('text-zinc-600', 'dark:text-zinc-400');
-        } else {
-            delete message.dataset.hint;
-        }
-    }
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-    refreshLicenseStatus().then(() => {
-        if (!appFeatures.isPro) {
-            setTimeout(() => document.getElementById('license-key-input')?.focus(), 80);
-        }
-    });
-}
-
-function closeLicenseModal() {
-    const modal = document.getElementById('license-modal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    const message = document.getElementById('license-message');
-    if (message) delete message.dataset.hint;
-    restoreViewIfIdle();
-}
-
-async function activateLicenseKey() {
-    if (licenseBusy) return;
-    const input = document.getElementById('license-key-input');
-    const key = input?.value || '';
-    const btn = document.getElementById('license-activate-btn');
-    licenseBusy = true;
-    if (btn) {
-        btn.disabled = true;
-        btn.textContent = 'Checking…';
-    }
-    try {
-        const result = await omni.invoke('license:activate', key);
-        applyLicenseStatus(result);
-        if (result.ok) {
-            const message = document.getElementById('license-message');
-            if (message) {
-                message.dataset.hint = 'Pro unlocked on this computer.';
-                message.textContent = message.dataset.hint;
-                message.classList.remove('hidden', 'text-red-600', 'dark:text-red-400');
-                message.classList.add('text-zinc-600', 'dark:text-zinc-400');
-            }
-        }
-    } catch (error) {
-        applyLicenseStatus({
-            isPro: appFeatures.isPro,
-            features: appFeatures,
-            error: error.message || 'Activation failed'
-        });
-    } finally {
-        licenseBusy = false;
-        if (btn) {
-            btn.disabled = false;
-            btn.textContent = 'Activate';
-        }
-    }
-}
-
-async function clearLicenseKey() {
-    if (licenseBusy) return;
-    licenseBusy = true;
-    try {
-        const result = await omni.invoke('license:clear');
-        applyLicenseStatus(result);
-    } catch (error) {
-        console.error('Failed to clear license:', error);
-    } finally {
-        licenseBusy = false;
-    }
-}
-
-function openLicenseCheckout() {
-    const url = appFeatures.checkoutUrl || 'https://polar.sh/';
-    omni.openExternal(url);
-}
-
-document.getElementById('license-key-input')?.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        activateLicenseKey();
-    }
-});
-
-omni.on('license-updated', (status) => applyLicenseStatus(status));
-refreshLicenseStatus();
 
 function openHelpModal() {
     closeMoreMenu({ restoreView: false });

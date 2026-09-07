@@ -437,8 +437,8 @@
                         More menu
                     </h4>
                     <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 pl-8">
-                        The <strong>⋯</strong> button opens Help, License, and Reset. Reset clears open tabs and returns Seizia
-                        to defaults; it does <strong>not</strong> delete My prompts or your license.
+                        The <strong>⋯</strong> button opens Help and Reset. Reset clears open tabs and returns Seizia
+                        to defaults; it does <strong>not</strong> delete My prompts.
                     </p>
                 </section>
 
@@ -541,71 +541,6 @@
                         Got it
                     </button>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- License Modal -->
-    <div id="license-modal"
-        class="hidden fixed inset-0 bg-[#f3eee6]/80 dark:bg-[#0a0b0d]/80 backdrop-blur-sm z-[160] flex items-center justify-center animate-fade-in">
-        <div class="shop-dialog p-7 w-full max-w-[440px] mx-4">
-            <div class="flex items-start justify-between gap-3 mb-5">
-                <div>
-                    <h3 class="shop-title text-3xl text-zinc-900 dark:text-zinc-50">License</h3>
-                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
-                        Free runs three AIs. Pro unlocks Ask All, Split, and your prompt library.
-                    </p>
-                </div>
-                <button type="button" onclick="closeLicenseModal()"
-                    class="text-zinc-400 hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-white transition-colors shrink-0"
-                    aria-label="Close license">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                </button>
-            </div>
-
-            <div id="license-status-card"
-                class="mb-5 p-4 border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-950/40">
-                <div class="flex items-center justify-between gap-3">
-                    <div>
-                        <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Current plan</p>
-                        <p id="license-plan-label" class="shop-title text-2xl text-zinc-900 dark:text-zinc-50 mt-0.5">Free</p>
-                    </div>
-                    <span id="license-plan-badge"
-                        class="text-[10px] font-bold uppercase tracking-wider px-2 py-1 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
-                        Free
-                    </span>
-                </div>
-                <p id="license-key-meta" class="mt-3 text-xs text-zinc-500 dark:text-zinc-400 font-mono break-all"></p>
-                <p id="license-message" class="mt-2 text-xs text-zinc-600 dark:text-zinc-400 hidden"></p>
-            </div>
-
-            <div id="license-activate-panel" class="space-y-3">
-                <label for="license-key-input" class="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">
-                    License key
-                </label>
-                <input id="license-key-input" type="text" autocomplete="off" spellcheck="false"
-                    placeholder="SEIZIA-XXXX-XXXX-XXXX"
-                    class="shop-field w-full h-11 px-3 text-sm text-zinc-900 dark:text-zinc-200 outline-none font-mono">
-                <div class="flex flex-wrap gap-2">
-                    <button id="license-activate-btn" type="button" onclick="activateLicenseKey()"
-                        class="shop-ask h-10 px-4 bg-seizia hover:bg-seizia-hover text-white text-xs font-bold transition-all">
-                        Activate
-                    </button>
-                    <button id="license-buy-btn" type="button" onclick="openLicenseCheckout()"
-                        class="h-10 px-4 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-200 text-xs font-bold uppercase tracking-wider hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-                        Buy Pro
-                    </button>
-                </div>
-            </div>
-
-            <div id="license-pro-actions" class="hidden flex flex-wrap gap-2 mt-1">
-                <button type="button" onclick="clearLicenseKey()"
-                    class="h-10 px-4 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 text-xs font-bold uppercase tracking-wider hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-                    Remove license
-                </button>
             </div>
         </div>
     </div>

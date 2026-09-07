@@ -209,11 +209,6 @@ function openPromptsModal(options = {}) {
     closeMoreMenu({ restoreView: false });
     omni.send('hide-current-view');
 
-    if ((options.tab === 'mine' || options.tab === 'categories' || options.draft) && !appFeatures.myPrompts) {
-        openLicenseModal('My prompts is a Pro feature. Paste your license to unlock it.');
-        return;
-    }
-
     if (options.tab) promptsTab = options.tab;
     hidePromptEditor();
     hidePromptChooser();
@@ -517,10 +512,6 @@ function nextCopyTitle(title) {
 }
 
 function saveCatalogCopy(prompt) {
-    if (!appFeatures.myPrompts) {
-        openLicenseModal('Saving prompts is a Pro feature. Paste your license to unlock it.');
-        return;
-    }
     const prompts = loadUserPrompts();
     prompts.unshift({
         id: `user-${Date.now()}`,
@@ -870,10 +861,6 @@ function savePromptFromEditor() {
 }
 
 function saveBroadcastAsPrompt() {
-    if (!appFeatures.myPrompts) {
-        openLicenseModal('Saving prompts is a Pro feature. Paste your license to unlock it.');
-        return;
-    }
     const body = document.getElementById('broadcast-input').value.trim();
     if (!body) {
         showAlert('Empty prompt', 'Write something before saving it.');
@@ -921,36 +908,20 @@ document.addEventListener('DOMContentLoaded', () => {
         setPromptsTab('library');
     });
     document.getElementById('prompts-tab-mine')?.addEventListener('click', () => {
-        if (!appFeatures.myPrompts) {
-            openLicenseModal('My prompts is a Pro feature. Paste your license to unlock it.');
-            return;
-        }
         hidePromptEditor();
         hidePromptChooser();
         setPromptsTab('mine');
     });
     document.getElementById('prompts-tab-categories')?.addEventListener('click', () => {
-        if (!appFeatures.myPrompts) {
-            openLicenseModal('Categories is a Pro feature. Paste your license to unlock it.');
-            return;
-        }
         hidePromptEditor();
         hidePromptChooser();
         setPromptsTab('categories');
         setTimeout(() => document.getElementById('prompts-category-add-name')?.focus(), 50);
     });
     document.getElementById('prompts-new-btn')?.addEventListener('click', () => {
-        if (!appFeatures.myPrompts) {
-            openLicenseModal('Saving your own prompts is a Pro feature.');
-            return;
-        }
         showPromptEditor();
     });
     document.getElementById('prompts-empty-new-btn')?.addEventListener('click', () => {
-        if (!appFeatures.myPrompts) {
-            openLicenseModal('Saving your own prompts is a Pro feature.');
-            return;
-        }
         showPromptEditor();
     });
     document.getElementById('prompts-category-add-btn')?.addEventListener('click', addCategoryFromPanel);

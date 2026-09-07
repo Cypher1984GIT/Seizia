@@ -7,7 +7,6 @@ const { createAppMenu } = require('./src/main/menu');
 const { ViewManager } = require('./src/main/viewManager');
 const { createPromptStore } = require('./src/main/promptStore');
 const { createMoreMenuController } = require('./src/main/moreMenuPopup');
-const { createLicenseLayer } = require('./src/main/proLayer');
 
 let win;
 let currentTheme = 'dark';
@@ -16,7 +15,6 @@ configureGlobalWebContents(app);
 
 const stateStore = createWindowStateStore(app);
 const promptStore = createPromptStore(app);
-const licenseService = createLicenseLayer({ app });
 const moreMenu = createMoreMenuController({
     winRef: () => win,
     getTheme: () => currentTheme,
@@ -119,13 +117,6 @@ function createWindow() {
 
     win.webContents.on('did-finish-load', () => {
         win.webContents.send('app-version', app.getVersion());
-        licenseService.getStatus({ refresh: true }).then((status) => {
-            if (win && !win.isDestroyed()) {
-                win.webContents.send('license-updated', status);
-            }
-        }).catch((error) => {
-            console.error('License refresh failed:', error);
-        });
     });
 }
 
@@ -201,22 +192,6 @@ ipcMain.handle('prompts-get', () => {
 
 ipcMain.handle('prompts-set', (_event, prompts) => {
     return promptStore.write(prompts);
-});
-
-ipcMain.handle('license:status', async () => {
-    return licenseService.getStatus({ refresh: false });
-});
-
-ipcMain.handle('license:activate', async (_event, key) => {
-    return licenseService.activate(key);
-});
-
-ipcMain.handle('license:clear', async () => {
-    return licenseService.clear();
-});
-
-ipcMain.handle('features:get', async () => {
-    return licenseService.getFeatures();
 });
 
 ipcMain.on('show-more-menu', (_event, pos = {}) => {

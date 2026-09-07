@@ -33,17 +33,12 @@ const RECEIVE_CHANNELS = new Set([
     'update-status',
     'update-available',
     'update-ready',
-    'more-menu-action',
-    'license-updated'
+    'more-menu-action'
 ]);
 
 const INVOKE_CHANNELS = new Set([
     'prompts-get',
-    'prompts-set',
-    'license:status',
-    'license:activate',
-    'license:clear',
-    'features:get'
+    'prompts-set'
 ]);
 
 contextBridge.exposeInMainWorld('omni', {
