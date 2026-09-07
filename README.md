@@ -82,9 +82,13 @@ Seizia is designed with privacy as a priority.
 - **Direct Connection**: The application connects directly to the AI service providers. No chat data or credentials are routed through or stored on external servers managed by Seizia.
 - **Transparency**: As an open-source project, the code is fully auditable to ensure no hidden tracking exists.
 
-## Open Source
+## License
 
-This project is **Open Source**. We believe in the power of community and transparency. You are free to explore, modify, and contribute to the codebase.
+The Seizia desktop app is open source under the [ISC License](LICENSE). You are welcome to explore the code, open issues, and send pull requests.
+
+**Seizia Pro** is the paid tier, unlocked with a license key bought once: Ask All, Split View, your own prompt library with categories, and more than three tabs at a time. The free app is fully usable without it.
+
+If you fork Seizia and redistribute a modified build, please ship it under a different name. "Seizia" and its logo identify the official builds, so that users always know what they are downloading.
 
 ## Author
 
