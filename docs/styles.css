@@ -254,6 +254,8 @@ h1 em {
 
 .crate {
     justify-self: end;
+    /* figure carries a 40px UA side margin that would push the shot off-screen */
+    margin: 0;
     width: min(100%, 640px);
     transform: rotate(-2.1deg) translateY(0.6rem);
     animation: settle 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -363,6 +365,15 @@ h2 {
     margin-top: 1.6rem;
 }
 
+/* Grid items default to min-width:auto, so a long command would widen the track. */
+.hero > *,
+.sheet-head > *,
+.stamps > *,
+.crates > *,
+.bom li > * {
+    min-width: 0;
+}
+
 .stamp,
 .label {
     padding: 1.3rem 1.25rem 1.2rem;
@@ -442,6 +453,9 @@ pre {
     font-family: inherit;
     font-size: 0.78rem;
     line-height: 1.5;
+    /* Commands stay one line on wide screens and fold instead of clipping on phones. */
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
 #download .actions {
@@ -544,6 +558,7 @@ pre {
     }
 
     .lot {
+        justify-self: start;
         text-align: left;
     }
 
