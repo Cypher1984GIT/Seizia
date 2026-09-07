@@ -468,9 +468,9 @@ pre {
 
 .slip-made {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.7rem;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
 }
 
 .slip-badge {
