@@ -24,8 +24,6 @@
 - **General**: ChatGPT, Gemini, Grok, Copilot, Claude, Perplexity, Poe, DeepSeek, Mistral, HuggingChat, Meta AI
 - **Private**: Duck.ai (DuckDuckGo), Lumo (Proton)
 
-> ⚠️ **Windows Note**: Since this app is not signed with an official enterprise certificate, Windows SmartScreen may flag it as an "Unrecognized App". To install, click **"More info"** and then **"Run anyway"**. This is normal for open-source software.
-
 ## How It Works
 
 Seizia wraps different web-based AI interfaces into dedicated, persistent tabs. It leverages Electron's `BrowserView` capability to ensure that each AI session is independent and secure, allowing for:
