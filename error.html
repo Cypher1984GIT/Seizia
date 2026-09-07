@@ -2,6 +2,8 @@
 <html>
 
 <head>
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; form-action 'none';">
     <style>
         body {
             font-family: "IBM Plex Mono", ui-monospace, monospace;
@@ -70,10 +72,28 @@
     <script>
         function retry() {
             const params = new URLSearchParams(window.location.search);
-            const url = params.get('url');
-            if (url) {
-                window.location.href = url;
+            const target = params.get('url');
+
+            if (!target) {
+                return;
             }
+
+            let parsed;
+
+            try {
+                parsed = new URL(target);
+            } catch {
+                return;
+            }
+
+            // The query string reaches this page unfiltered, so anything other
+            // than http(s) is refused: a javascript: url assigned to location
+            // would run here, and file: would expose the local disk.
+            if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+                return;
+            }
+
+            window.location.href = parsed.href;
         }
     </script>
 </body>
