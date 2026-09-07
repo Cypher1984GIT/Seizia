@@ -468,9 +468,14 @@ pre {
 
 .slip-made {
     display: flex;
-    flex-wrap: wrap;
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
     align-items: center;
     gap: 0.55rem;
+}
+
+.slip-made p {
+    white-space: nowrap;
 }
 
 .slip-badge {
