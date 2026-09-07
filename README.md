@@ -10,8 +10,23 @@
 | :--- | :--- |
 | **Linux (Debian/Ubuntu)** | [Download .deb](https://github.com/Cypher1984GIT/Seizia/releases/latest) |
 | **Linux (Universal)** | [Download .AppImage](https://github.com/Cypher1984GIT/Seizia/releases/latest) |
-| **Windows** | Coming soon |
-| **Mac (Universal: Intel + Apple Silicon)** | Coming soon |
+| **Windows** | [Download the installer](https://github.com/Cypher1984GIT/Seizia/releases/latest) |
+| **Mac (Universal: Intel + Apple Silicon)** | [Download .dmg](https://github.com/Cypher1984GIT/Seizia/releases/latest) |
+
+### First launch on Windows and macOS
+
+The Windows and macOS builds are not code-signed, because a certificate costs
+more per year than this free app takes in. Both systems will therefore warn you
+the first time, and both let you continue:
+
+- **Windows**: SmartScreen shows *"Windows protected your PC"*. Click **More
+  info**, then **Run anyway**.
+- **macOS**: the first attempt is refused. Open **System Settings → Privacy &
+  Security**, scroll to the bottom and click **Open Anyway** next to Seizia,
+  then confirm. You only do this once.
+
+If you would rather not trust a binary you cannot verify, build it yourself from
+this repository: see [Development & Installation](#development--installation).
 
 ## ✨ Latest Updates (v1.6.1)
 - **Release CI**: Fixed GitHub Actions (lockfile sync, Node 22, publish permissions); single release workflow.
