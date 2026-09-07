@@ -1,14 +1,20 @@
-const { shell } = require('electron');
+const { shell, dialog, BrowserWindow } = require('electron');
 
 const SPELLCHECK_LANGUAGES = ['es-ES', 'en-US'];
-const ALLOWED_PERMISSIONS = new Set([
+
+// Granted without asking: none of these reach hardware or stored credentials.
+const AUTO_ALLOWED_PERMISSIONS = new Set([
     'clipboard-read',
     'clipboard-sanitized-write',
     'notifications',
-    'media',
     'fullscreen',
     'pointerLock'
 ]);
+
+// Camera and microphone are asked for instead, once per origin and device, and
+// the answer is remembered for the rest of the run. The map lives at module
+// scope so opening a second tab on the same site does not ask again.
+const mediaDecisions = new Map();
 
 // Domains whose security headers must stay intact (auth, captchas, embeds).
 const PRESERVE_SECURITY_HEADERS_FOR = [
@@ -75,9 +81,81 @@ function configureGlobalWebContents(app) {
     });
 }
 
+function describeMediaTypes(mediaTypes) {
+    const wantsAudio = mediaTypes.includes('audio');
+    const wantsVideo = mediaTypes.includes('video');
+
+    if (wantsAudio && wantsVideo) {
+        return 'microphone and camera';
+    }
+
+    return wantsVideo ? 'camera' : 'microphone';
+}
+
+function describeRequestOrigin(details, webContents) {
+    const candidate = (details && (details.securityOrigin || details.requestingUrl))
+        || (webContents && !webContents.isDestroyed() && webContents.getURL())
+        || '';
+
+    try {
+        return new URL(candidate).origin;
+    } catch {
+        return candidate || 'This site';
+    }
+}
+
 function createPermissionHandler() {
-    return (_webContents, permission, callback) => {
-        callback(ALLOWED_PERMISSIONS.has(permission));
+    return (webContents, permission, callback, details) => {
+        if (AUTO_ALLOWED_PERMISSIONS.has(permission)) {
+            callback(true);
+            return;
+        }
+
+        if (permission !== 'media') {
+            callback(false);
+            return;
+        }
+
+        const mediaTypes = (details && details.mediaTypes) || [];
+
+        // A media request that names no device cannot be described to the user.
+        if (!mediaTypes.length) {
+            callback(false);
+            return;
+        }
+
+        const origin = describeRequestOrigin(details, webContents);
+        const device = describeMediaTypes(mediaTypes);
+        const decisionKey = `${origin}|${device}`;
+
+        if (mediaDecisions.has(decisionKey)) {
+            callback(mediaDecisions.get(decisionKey));
+            return;
+        }
+
+        const options = {
+            type: 'question',
+            buttons: ['Block', 'Allow'],
+            defaultId: 0,
+            cancelId: 0,
+            title: 'Permission request',
+            message: `Allow ${origin} to use your ${device}?`,
+            detail: 'Seizia remembers this choice until you quit the app.'
+        };
+
+        const parent = BrowserWindow.getFocusedWindow();
+        const ask = parent
+            ? dialog.showMessageBox(parent, options)
+            : dialog.showMessageBox(options);
+
+        ask.then(({ response }) => {
+            const granted = response === 1;
+            mediaDecisions.set(decisionKey, granted);
+            callback(granted);
+        }).catch((error) => {
+            console.error('Failed to ask for media permission:', error);
+            callback(false);
+        });
     };
 }
 
