@@ -1,7 +1,7 @@
 const path = require('path');
 const { app, BrowserWindow, BrowserView, Menu, clipboard, ipcMain, nativeImage, nativeTheme } = require('electron');
 const { createWindowStateStore } = require('./src/main/windowState');
-const { configureGlobalWebContents } = require('./src/main/security');
+const { configureGlobalWebContents, clearMediaDecisions } = require('./src/main/security');
 const { createUpdater } = require('./src/main/updater');
 const { createAppMenu } = require('./src/main/menu');
 const { ViewManager } = require('./src/main/viewManager');
@@ -199,6 +199,9 @@ ipcMain.on('show-more-menu', (_event, pos = {}) => {
 });
 
 ipcMain.on('more-menu-pick', (_event, action) => {
+    if (action === 'permissions') {
+        clearMediaDecisions();
+    }
     moreMenu.pick(action);
 });
 

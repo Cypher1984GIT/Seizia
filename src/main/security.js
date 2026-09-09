@@ -14,7 +14,12 @@ const AUTO_ALLOWED_PERMISSIONS = new Set([
 // Camera and microphone are asked for instead, once per origin and device, and
 // the answer is remembered for the rest of the run. The map lives at module
 // scope so opening a second tab on the same site does not ask again.
+// ⋯ → Permissions clears the map so the next request asks again.
 const mediaDecisions = new Map();
+
+function clearMediaDecisions() {
+    mediaDecisions.clear();
+}
 
 // Response headers are left untouched on purpose. Sites are shown in a
 // top-level BrowserView, never in an iframe or a <webview>, so X-Frame-Options
@@ -103,7 +108,7 @@ function createPermissionHandler() {
             cancelId: 0,
             title: 'Permission request',
             message: `Allow ${origin} to use your ${device}?`,
-            detail: 'Seizia remembers this choice until you quit the app.'
+            detail: 'Seizia remembers this choice until you quit. To change it later, open ⋯ and choose Permissions.'
         };
 
         const parent = BrowserWindow.getFocusedWindow();
@@ -135,5 +140,6 @@ module.exports = {
     SPELLCHECK_LANGUAGES,
     configureGlobalWebContents,
     createPermissionHandler,
+    clearMediaDecisions,
     isSafeExternalUrl
 };

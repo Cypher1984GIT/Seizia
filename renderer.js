@@ -984,6 +984,12 @@ document.getElementById('more-btn')?.addEventListener('click', toggleMoreMenu);
 omni.on('more-menu-action', (action) => {
     if (action === 'help') openHelpModal();
     if (action === 'reset') resetDefaults();
+    if (action === 'permissions') {
+        showAlert(
+            'Permissions cleared',
+            'Mic and camera choices were cleared. Click the microphone on the AI site again — or reload the tab if it still says access is blocked — and Seizia will ask once more.'
+        );
+    }
 });
 
 function openHelpModal() {

@@ -22,5 +22,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     bindItem('more-menu-help', 'help');
+    bindItem('more-menu-permissions', 'permissions');
     bindItem('more-menu-reset', 'reset');
 });

@@ -4,7 +4,7 @@
 
 ![Seizia Interface](assets/eencapture.png)
 
-## 📥 Download (v1.6.1)
+## 📥 Download (v1.6.2)
 
 | OS | Link |
 | :--- | :--- |
@@ -28,7 +28,11 @@ the first time, and both let you continue:
 If you would rather not trust a binary you cannot verify, build it yourself from
 this repository: see [Development & Installation](#development--installation).
 
-## ✨ Latest Updates (v1.6.1)
+## ✨ Latest Updates (v1.6.2)
+- **Permissions**: After you block mic or camera for an AI, ⋯ → Permissions clears that choice so Seizia asks again.
+- **Landing**: Fixed mobile clipping on the download crates and the hero screenshot.
+
+## ✨ Previous (v1.6.1)
 - **Release CI**: Fixed GitHub Actions (lockfile sync, Node 22, publish permissions); single release workflow.
 - **AI Catalog**: Refreshed launcher — added Poe, Mistral, HuggingChat, Meta AI and Duck.ai; removed less-used services.
 - **Themes**: More reliable light/dark sync for embedded AIs; fixed Cloudflare Turnstile login issues (e.g. Poe).
