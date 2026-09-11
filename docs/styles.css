@@ -363,6 +363,7 @@ h2 {
     grid-template-columns: 1fr 1fr;
     gap: 1.1rem;
     margin-top: 1.6rem;
+    align-items: stretch;
 }
 
 /* Grid items default to min-width:auto, so a long command would widen the track. */
@@ -379,6 +380,14 @@ h2 {
     padding: 1.3rem 1.25rem 1.2rem;
     background: var(--steel);
     border: 1px solid var(--edge);
+}
+
+/* Fill the grid row, then pin the download button to the bottom edge. */
+.label {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-height: 100%;
 }
 
 .stamp header {
@@ -399,7 +408,11 @@ h2 {
 /* Each crate carries its own download, so the button fills the box width. */
 .label .btn {
     width: 100%;
-    margin-top: 1rem;
+    margin-top: auto;
+}
+
+.label pre {
+    margin-bottom: 1rem;
 }
 
 .price {
@@ -555,21 +568,54 @@ pre {
     .rail,
     .hero {
         grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+    }
+
+    .rail {
+        gap: 0.85rem;
+    }
+
+    .brand {
+        justify-content: center;
     }
 
     .lot {
-        justify-self: start;
-        text-align: left;
+        justify-self: center;
+        text-align: center;
     }
 
     .rail nav {
-        justify-content: flex-start;
+        justify-content: center;
     }
 
     .ghost {
+        left: 50%;
         top: auto;
         bottom: 8%;
+        transform: translateX(-50%);
         font-size: 32vw;
+    }
+
+    .hero-copy {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    h1 {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .lede,
+    .sheet-head p {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .actions {
+        justify-content: center;
     }
 
     .crate {
@@ -577,6 +623,16 @@ pre {
         width: 100%;
         transform: none;
         animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+        text-align: center;
+    }
+
+    .crate figcaption {
+        text-align: center;
+    }
+
+    .sheet,
+    .slip {
+        text-align: center;
     }
 
     .sheet-head,
@@ -584,10 +640,47 @@ pre {
     .stamps,
     .crates {
         grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    .sheet-head {
+        text-align: center;
     }
 
     .bom li {
         gap: 0.25rem;
+        text-align: center;
+        justify-items: center;
+    }
+
+    .bom span:last-child {
+        max-width: 36rem;
+    }
+
+    .stamp,
+    .label {
+        width: 100%;
+        text-align: center;
+    }
+
+    .stamp header {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .stamp ul {
+        display: inline-block;
+        text-align: left;
+    }
+
+    .slip {
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .slip-made {
+        justify-content: center;
     }
 }
 
