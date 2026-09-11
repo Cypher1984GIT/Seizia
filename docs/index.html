@@ -8,9 +8,11 @@
     <meta name="color-scheme" content="dark">
     <title>Seizia - Several AIs, One Window</title>
     <meta name="description" content="A desktop app for Linux, Windows and macOS. ChatGPT, Gemini, Claude and the rest in tabs. Each AI stays its own site. Seizia does not store your chats.">
+    <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://seizia.app/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Seizia">
+    <meta property="og:locale" content="en_US">
     <meta property="og:url" content="https://seizia.app/">
     <meta property="og:title" content="Seizia - Several AIs, One Window">
     <meta property="og:description" content="A desktop app for Linux, Windows and macOS. ChatGPT, Gemini, Claude and the rest in tabs. Each AI stays its own site. Seizia does not store your chats.">
@@ -20,11 +22,70 @@
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="The Seizia window with its launcher of AI tiles: ChatGPT, Gemini, Claude, Grok and more.">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Seizia - Several AIs, One Window">
+    <meta name="twitter:description" content="A desktop app for Linux, Windows and macOS. ChatGPT, Gemini, Claude and the rest in tabs. Each AI stays its own site. Seizia does not store your chats.">
+    <meta name="twitter:image" content="https://seizia.app/og.jpg">
+    <meta name="twitter:image:alt" content="The Seizia window with its launcher of AI tiles: ChatGPT, Gemini, Claude, Grok and more.">
     <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="sitemap" type="application/xml" href="https://seizia.app/sitemap.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "@id": "https://seizia.app/#website",
+                "url": "https://seizia.app/",
+                "name": "Seizia",
+                "description": "A desktop app for Linux, Windows and macOS. ChatGPT, Gemini, Claude and the rest in tabs. Each AI stays its own site. Seizia does not store your chats.",
+                "inLanguage": "en",
+                "publisher": {
+                    "@id": "https://seizia.app/#organization"
+                }
+            },
+            {
+                "@type": "Organization",
+                "@id": "https://seizia.app/#organization",
+                "name": "Seizia",
+                "url": "https://seizia.app/",
+                "logo": "https://seizia.app/icon.png",
+                "sameAs": [
+                    "https://github.com/Cypher1984GIT/Seizia"
+                ]
+            },
+            {
+                "@type": "SoftwareApplication",
+                "@id": "https://seizia.app/#app",
+                "name": "Seizia",
+                "url": "https://seizia.app/",
+                "applicationCategory": "UtilitiesApplication",
+                "operatingSystem": "Linux, Windows, macOS",
+                "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD"
+                },
+                "description": "A desktop app that opens ChatGPT, Gemini, Claude, Grok and other AIs as tabs in one window. Each AI keeps its own session. Seizia does not store your chats.",
+                "image": "https://seizia.app/og.jpg",
+                "downloadUrl": "https://github.com/Cypher1984GIT/Seizia/releases/latest",
+                "softwareVersion": "1.6.2",
+                "author": {
+                    "@type": "Person",
+                    "name": "Cypher1984",
+                    "url": "https://cypher1984.xyz"
+                },
+                "publisher": {
+                    "@id": "https://seizia.app/#organization"
+                }
+            }
+        ]
+    }
+    </script>
 </head>
 
 <body>
