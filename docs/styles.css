@@ -489,7 +489,13 @@ pre {
     letter-spacing: 0.06em;
 }
 
-.slip a {
+.slip a,
+.slip a:link,
+.slip a:visited,
+.slip a:hover,
+.slip a:active,
+.slip a:focus,
+.slip a:focus-visible {
     text-decoration: none;
 }
 
@@ -507,6 +513,10 @@ pre {
 
 .slip-made p {
     white-space: nowrap;
+}
+
+.slip-made p a {
+    text-decoration: none;
 }
 
 .slip-badge {
